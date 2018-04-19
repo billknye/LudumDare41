@@ -19,7 +19,7 @@ namespace LudumDare41
 
         public static class Fonts
         {
-            public static TrueTypeSpriteFont Japonesa16pt;
+            public static TrueTypeSpriteFont Yikes32pt;
         }
 
         public static class Songs
@@ -40,7 +40,7 @@ namespace LudumDare41
 
             Sprites.SampleSprite = contentManager.Get<Texture2D>("samplesprite").Content;
 
-            Fonts.Japonesa16pt = contentManager.Get<TrueTypeFontLoader>("japonesa").Content.Create(16);
+            Fonts.Yikes32pt = contentManager.Get<TrueTypeFontLoader>("yikes").Content.Create(32);
 
             Songs.Intro = contentManager.Get<Song>("song").Content;
 

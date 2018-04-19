@@ -85,13 +85,12 @@ namespace LudumDare41
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.NavajoWhite);
+            GraphicsDevice.Clear(Color.Black);
 
             spriteBatch.Begin();
             spriteBatch.Draw(Assets.Sprites.SampleSprite, Vector2.Zero, Color.FromNonPremultiplied((int)DateTime.UtcNow.Millisecond % 255, 255, 255, 255));
 
-            spriteBatch.DrawString(Assets.Fonts.Japonesa16pt, "Lorem ipsum dolor sit amet, cu est scripserit voluptatibus, cu vidit summo soluta nec. Autem saperet intellegam et ius, eos sanctus delicata an. Te eum omnium democritum. Eu per noster epicuri dissentiunt, et dolor scripserit sit. An dicam maluisset forensibus sit, pri ei stet commodo signiferumque. Eam ex graecis corrumpit.", new Vector2(0, 0), Color.Black);
-            spriteBatch.DrawString(Assets.Fonts.Japonesa16pt, "Press space for sound effect.", new Vector2(0, 200), Color.Black);
+            spriteBatch.DrawString(Assets.Fonts.Yikes32pt, "Kill all the things", new Vector2(0, 0), Color.Black);
 
             spriteBatch.End();
 
