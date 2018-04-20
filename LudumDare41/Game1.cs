@@ -153,6 +153,16 @@ namespace LudumDare41
                 playerPosition += Vector2.Transform(moveVector, rot) * speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
             }
 
+            playerPosition = new Vector2(
+                Math.Min(playerPosition.X, 64 * map.GetLength(0)),
+                Math.Min(playerPosition.Y, 64 * map.GetLength(1))
+                );
+
+            playerPosition = new Vector2(
+                Math.Max(playerPosition.X, 0),
+                Math.Max(playerPosition.Y, 0)
+                );
+
             if (lastMouse.LeftButton == ButtonState.Released && mouse.LeftButton == ButtonState.Pressed)
             {
                 // shoot
@@ -209,6 +219,9 @@ namespace LudumDare41
                 zombies.Remove(zombie);
             }
 
+            // wow this is total garbage...  TODO
+            // rewrite all of this, later.
+
             if (zombies.Count > 0)
             {
                 foreach (var luckyZombie in zombies)
@@ -220,10 +233,19 @@ namespace LudumDare41
                     var rot = Matrix.CreateRotationZ(luckyZombie.Angle);
                     luckyZombie.Position += Vector2.Transform(zombieMove, rot) * speed * 0.3f * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-                    if (Vector2.DistanceSquared(luckyZombie.Position, playerPosition) < 0.2f)
+                    if (Vector2.DistanceSquared(luckyZombie.Position, playerPosition) < 0.2f && luckyZombie.AttackCooldown < DateTime.UtcNow)
                     {
                         // do attack thing
                         Console.WriteLine("attack");
+
+                        luckyZombie.AttackCooldown = DateTime.UtcNow.AddSeconds(1.5);
+
+                        playerHealth--;
+
+                        if (playerHealth <= 0)
+                        {
+                            Exit(); // you lose
+                        }
                     }
                 }
             }

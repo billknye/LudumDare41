@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using System;
 
 namespace LudumDare41
 {
@@ -8,6 +9,8 @@ namespace LudumDare41
         public float Angle;
 
         public int Health, MaxHealth;
+
+        public DateTime AttackCooldown;
 
         // todo A to the I
 
