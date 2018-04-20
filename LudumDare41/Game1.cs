@@ -167,7 +167,7 @@ namespace LudumDare41
             {
                 // shoot
 
-                var bulletSpeed = 15f;
+                var bulletSpeed = 20f;
 
                 var bullet = new Bullet();
                 bullet.Position = playerPosition + new Vector2((float)Math.Cos(playerAngle), (float)Math.Sin(playerAngle)) * 0.25f;
