@@ -47,6 +47,7 @@
   </PropertyGroup>
   <ItemGroup>
     <None Include="Content\fonts\yikes.ttf" />
+    <None Include="Content\sfx\zombie\zombie-1.ogg" />
     <None Include="libopenal.1.dylib">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -84,6 +85,34 @@
     <EmbeddedResource Include="Icon.bmp" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\gfx\bullet.png" />
+    <Content Include="Content\gfx\character.png" />
+    <Content Include="Content\gfx\tilesheet.png" />
+    <Content Include="Content\gfx\zombie.png" />
+    <Content Include="Content\sfx\pistol.wav" />
+    <Content Include="Content\sfx\zombie\zombie-10.wav" />
+    <Content Include="Content\sfx\zombie\zombie-11.wav" />
+    <Content Include="Content\sfx\zombie\zombie-12.wav" />
+    <Content Include="Content\sfx\zombie\zombie-13.wav" />
+    <Content Include="Content\sfx\zombie\zombie-14.wav" />
+    <Content Include="Content\sfx\zombie\zombie-15.wav" />
+    <Content Include="Content\sfx\zombie\zombie-16.wav" />
+    <Content Include="Content\sfx\zombie\zombie-17.wav" />
+    <Content Include="Content\sfx\zombie\zombie-18.wav" />
+    <Content Include="Content\sfx\zombie\zombie-19.wav" />
+    <Content Include="Content\sfx\zombie\zombie-2.wav" />
+    <Content Include="Content\sfx\zombie\zombie-20.wav" />
+    <Content Include="Content\sfx\zombie\zombie-21.wav" />
+    <Content Include="Content\sfx\zombie\zombie-22.wav" />
+    <Content Include="Content\sfx\zombie\zombie-23.wav" />
+    <Content Include="Content\sfx\zombie\zombie-24.wav" />
+    <Content Include="Content\sfx\zombie\zombie-3.wav" />
+    <Content Include="Content\sfx\zombie\zombie-4.wav" />
+    <Content Include="Content\sfx\zombie\zombie-5.wav" />
+    <Content Include="Content\sfx\zombie\zombie-6.wav" />
+    <Content Include="Content\sfx\zombie\zombie-7.wav" />
+    <Content Include="Content\sfx\zombie\zombie-8.wav" />
+    <Content Include="Content\sfx\zombie\zombie-9.wav" />
     <None Include="x64\SDL2.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
