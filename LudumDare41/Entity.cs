@@ -1,7 +1,7 @@
 ﻿namespace LudumDare41
 {
-    public class Entity
+    public abstract class Entity
     {
-        public Tile Tile;
+        public Tile Tile { get; set; }
     }
 }

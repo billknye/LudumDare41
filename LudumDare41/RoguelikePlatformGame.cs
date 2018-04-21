@@ -14,6 +14,7 @@ namespace LudumDare41
     /// </summary>
     public class RoguelikePlatformGame : Game
     {
+        const int tileSize = 64;
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         KeyboardState lastKeyboard;
@@ -108,7 +109,7 @@ namespace LudumDare41
             {
                 dest = new Point(0, 1);
             }
-            if (wasKeyJustPressed(Keys.NumPad3, keyboard, lastKeyboard) )
+            if (wasKeyJustPressed(Keys.NumPad3, keyboard, lastKeyboard))
             {
                 dest = new Point(1, 1);
             }
@@ -138,8 +139,8 @@ namespace LudumDare41
                 universe.DoMove(dest);                
             }
 
-            var width = (int)Math.Ceiling(Window.ClientBounds.Width / 64.0);
-            var height = (int)Math.Ceiling(Window.ClientBounds.Height / 64.0);
+            var width = (int)Math.Ceiling(Window.ClientBounds.Width / (double)tileSize);
+            var height = (int)Math.Ceiling(Window.ClientBounds.Height / (double)tileSize);
 
             // make player be center
             viewOffset = new Point(-width / 2 + universe.Player.Tile.Location.X, -height / 2 + universe.Player.Tile.Location.Y);
@@ -181,8 +182,8 @@ namespace LudumDare41
             var viewRectangle = new Rectangle(
                 viewOffset.X,
                 viewOffset.Y,
-                (int)Math.Ceiling(Window.ClientBounds.Width / 64.0),
-                (int)Math.Ceiling(Window.ClientBounds.Height / 64.0)
+                (int)Math.Ceiling(Window.ClientBounds.Width / (double)tileSize),
+                (int)Math.Ceiling(Window.ClientBounds.Height / (double)tileSize)
                 );
 
             var availableMoves = universe.GetAvailableMoves().ToList();
@@ -209,6 +210,14 @@ namespace LudumDare41
                     spriteBatch.Draw(Assets.Sprites.SampleSprite, new Vector2((tile.Location.X - viewOffset.X) * 64, (tile.Location.Y - viewOffset.Y) * 64), new Rectangle(0, 0, 64, 64), Color.White);
                 }
             });            
+
+
+            spriteBatch.Draw(Assets.Sprites.SampleSprite, new Vector2((universe.Player.Tile.Location.X - viewOffset.X) * tileSize, (universe.Player.Tile.Location.Y - viewOffset.Y) * tileSize), new Rectangle(0, 0, tileSize, tileSize), Color.White);
+
+            for (int i = 0; i < universe.Obstacles.Count; i++)
+            {
+                spriteBatch.Draw(Assets.Sprites.SampleSprite, new Vector2((universe.Obstacles[i].Tile.Location.X - viewOffset.X) * tileSize, (universe.Obstacles[i].Tile.Location.Y - viewOffset.Y) * tileSize), new Rectangle(tileSize * 2, 0, tileSize, tileSize), Color.White);
+            }
 
             spriteBatch.End();
 

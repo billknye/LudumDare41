@@ -10,6 +10,7 @@ namespace LudumDare41
         public Dictionary<Point, ChunkOfSpace> ChunksOfFreedom;
 
         public Player Player;
+        public List<Obstacle> Obstacles;
 
         Random r;
         SimplexNoise2D noise;
@@ -26,11 +27,23 @@ namespace LudumDare41
             chunk[0, 1].SomeTileShit = 1;
 
             Player = new Player();
-
+            Obstacles = new List<Obstacle>();
+            AddObstacles(Obstacles);
             EntityToTile(Player, this[0, 0]);
+        }
 
-            var enemy = new Enemy();
-            EntityToTile(enemy, this[7, 7]);
+        private void AddObstacles(List<Obstacle> obstacles)
+        {
+            //TODO: IMPROVE THIS SHIT
+            int seed = DateTime.Now.Millisecond;
+            Random numberOfObstacles = new Random(seed);
+
+            for (int i = 0; i < numberOfObstacles.Next(3) + 1; i++)
+            {
+                Obstacle obstacle = new Obstacle() { Destructible = true };
+                EntityToTile(obstacle, this[numberOfObstacles.Next(10), numberOfObstacles.Next(10)]);
+                obstacles.Add(obstacle);
+            }
         }
 
         public void GetTilesInRange(Rectangle viewRectangle, Action<Tile> doThing)
@@ -264,7 +277,7 @@ namespace LudumDare41
                 if (corner2def.Solid)
                     return;
             }
-            
+
 
             EntityFromTile(Player);
             EntityToTile(Player, dest);
@@ -353,8 +366,44 @@ namespace LudumDare41
                     }
                 }
 
-                Console.WriteLine("Grrr1");
             }
+        }
+
+        public class TileDefinition
+        {
+            public static int LastTileDefinitionId;
+            public static TileDefinition[] Definitions;
+
+            public static TileDefinition OpenSpace;
+            public static TileDefinition SolidThing;
+
+            static TileDefinition()
+            {
+                Definitions = new TileDefinition[256];
+
+                OpenSpace = AddTileDefinition(new TileDefinition());
+                SolidThing = AddTileDefinition(new SolidTileDefinition());
+            }
+
+            private static TileDefinition AddTileDefinition(TileDefinition tileDefinition)
+            {
+                Definitions[LastTileDefinitionId] = tileDefinition;
+                LastTileDefinitionId++;
+                return tileDefinition;
+            }
+
+            public virtual bool Solid
+            {
+                get
+                {
+                    return false;
+                }
+            }
+        }
+
+        public class SolidTileDefinition : TileDefinition
+        {
+            public override bool Solid => true;
         }
     }
 }
