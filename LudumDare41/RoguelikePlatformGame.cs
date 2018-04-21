@@ -163,28 +163,8 @@ namespace LudumDare41
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.Black);
-
-            Color[] testColors = new Color[]
-            {
-                Color.Black,
-                Color.White,
-                Color.Red,
-                Color.Orange,
-                Color.Yellow,
-                Color.Green,
-                Color.Magenta,
-                Color.Brown,
-                Color.Pink
-            };
-
+            
             spriteBatch.Begin();
-
-            var viewRectangle = new Rectangle(
-                viewOffset.X,
-                viewOffset.Y,
-                (int)Math.Ceiling(Window.ClientBounds.Width / (double)tileSize),
-                (int)Math.Ceiling(Window.ClientBounds.Height / (double)tileSize)
-                );
 
             var availableMoves = universe.GetAvailableMoves().ToList();
 
@@ -192,19 +172,20 @@ namespace LudumDare41
 
             universe.GetTilesInRange(universe.Player.Tile.Location.X, universe.Player.Tile.Location.Y, 5, tile =>
             {
-                spriteBatch.Draw(Assets.Sprites.SampleSprite, new Vector2((tile.Location.X - viewOffset.X) * 64, (tile.Location.Y - viewOffset.Y) * 64), new Rectangle(64, 0, 64, 64), testColors[ tile.SomeTileShit % testColors.Length]);
+                var spriteIndex = tile.Definition.SpriteIndex;
+                if (spriteIndex == 4)
+                    spriteIndex += Math.Abs((tile.Location.X * 23 + tile.Location.Y * 5) % 12);
+
+                spriteBatch.Draw(Assets.Sprites.SampleSprite, new Vector2((tile.Location.X - viewOffset.X) * 64, (tile.Location.Y - viewOffset.Y) * 64), new Rectangle((spriteIndex % 4) * 64, (spriteIndex / 4) * 64, 64, 64), Color.White);
                 
                 if (availableMoves.Contains(tile))
                 {
                     var loc = new Vector2((tile.Location.X - viewOffset.X) * 64, (tile.Location.Y - viewOffset.Y) * 64);
-
                     moveThings.Add(Tuple.Create(new Rectangle((int)loc.X, (int)loc.Y, 64, 64), tile.Location));
-
                     spriteBatch.Draw(Assets.Sprites.SampleSprite, loc, new Rectangle(64, 0, 64, 64), Color.Lime);
                 }
 
-                spriteBatch.DrawString(Assets.Fonts.Japonesa16pt, $"{tile.Location.X},{tile.Location.Y}", new Vector2((tile.Location.X - viewOffset.X) * 64, (tile.Location.Y - viewOffset.Y) * 64 + 40), Color.Black);
-                
+                spriteBatch.DrawString(Assets.Fonts.Japonesa16pt, $"{tile.Location.X},{tile.Location.Y}", new Vector2((tile.Location.X - viewOffset.X) * 64 + 2, (tile.Location.Y - viewOffset.Y) * 64 + 40), Color.Black);                
                 foreach(var people in tile.Entities)
                 {
                     spriteBatch.Draw(Assets.Sprites.SampleSprite, new Vector2((tile.Location.X - viewOffset.X) * 64, (tile.Location.Y - viewOffset.Y) * 64), new Rectangle(0, 0, 64, 64), Color.White);

@@ -11,9 +11,19 @@ namespace LudumDare41
 
         public List<Entity> Entities;
 
+        public TileDefinition Definition
+        {
+            get
+            {
+                return TileDefinition.Definitions[SomeTileShit];
+            }
+        }
+
         public Tile()
         {
             Entities = new List<Entity>();
         }
+
+
     }
 }
