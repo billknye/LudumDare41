@@ -9,7 +9,8 @@ namespace LudumDare41
     {
         public Dictionary<Point, ChunkOfSpace> ChunksOfFreedom;
 
-        public Entity Player;
+        public Player Player;
+        public List<Obstacle> Obstacles;
 
         SimplexNoise2D noise;
 
@@ -19,9 +20,24 @@ namespace LudumDare41
             noise = new SimplexNoise2D(293234, 100);
 
             generateChunk(0, 0);
-            Player = new Entity();
-
+            Player = new Player();
+            Obstacles = new List<Obstacle>();
+            AddObstacles(Obstacles);
             EntityToTile(Player, this[0, 0]);
+        }
+
+        private void AddObstacles(List<Obstacle> obstacles)
+        {
+            //TODO: IMPROVE THIS SHIT
+            int seed = DateTime.Now.Millisecond;
+            Random numberOfObstacles = new Random(seed);
+
+            for (int i = 0; i < numberOfObstacles.Next(3) + 1; i++)
+            {
+                Obstacle obstacle = new Obstacle() { Destructible = true };
+                EntityToTile(obstacle, this[numberOfObstacles.Next(10), numberOfObstacles.Next(10)]);
+                obstacles.Add(obstacle);
+            }           
         }
 
         public void GetTilesInRange(Rectangle viewRectangle, Action<Tile> doThing)
@@ -136,14 +152,14 @@ namespace LudumDare41
         public static TileDefinition[] Definitions;
 
         public static TileDefinition OpenSpace;
-        public static TileDefinition SoidTHing;
+        public static TileDefinition SolidThing;
 
         static TileDefinition()
         {
             Definitions = new TileDefinition[256];
 
             OpenSpace = AddTileDefinition(new TileDefinition());
-            SoidTHing = AddTileDefinition(new SolidTileDefinition());
+            SolidThing = AddTileDefinition(new SolidTileDefinition());
         }
 
         private static TileDefinition AddTileDefinition(TileDefinition tileDefinition)

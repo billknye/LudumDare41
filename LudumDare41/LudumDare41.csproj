@@ -46,6 +46,8 @@
   <ItemGroup>
     <Compile Include="ChunkOfSpace.cs" />
     <Compile Include="Entity.cs" />
+    <Compile Include="Obstacle.cs" />
+    <Compile Include="Player.cs" />
     <Compile Include="SimplexNoise2D.cs" />
     <Compile Include="Tile.cs" />
     <Compile Include="Universe.cs" />
