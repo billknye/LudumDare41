@@ -163,8 +163,8 @@ namespace LudumDare41.States
                 spriteBatch.Draw(Assets.Sprites.PixelTexture, new Rectangle(0, 0, gameStateManager.GameWidth, gameStateManager.GameHeight), Color.FromNonPremultiplied(0, 0, 0, (int)(30 - universe.Player.Oxygen) * 8));
             }
 
-            //HitPoints
-            spriteBatch.DrawString(Assets.Fonts.Japonesa16pt, universe.Player.HitPoints.ToString(), new Vector2(0, 0), Color.Green);
+            // HitPoints bar
+            spriteBatch.Draw(Assets.Sprites.PixelTexture, new Rectangle(0, 0, (int)(gameStateManager.GameWidth * universe.Player.HitPoints / UniverseConfiguration.PlayerInitialHP), 12), Color.Red);
 
             spriteBatch.End();
         }

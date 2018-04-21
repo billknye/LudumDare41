@@ -465,8 +465,8 @@ namespace LudumDare41
 
         private void Combat(Enemy enemy)
         {
-                Player.HitPoints = Player.HitPoints - rand.Next(1, enemy.BaseAttack);
-                enemy.HitPoints = enemy.HitPoints - rand.Next(1, Player.BaseAttack);                     
+            Player.HitPoints = Player.HitPoints - rand.Next(1, enemy.BaseAttack);
+            enemy.HitPoints = enemy.HitPoints - rand.Next(1, Player.BaseAttack);                     
         }
     }
 }
