@@ -30,6 +30,9 @@ namespace LudumDare41
                 chunk[x, 1].SomeTileShit = 1;
             }
 
+            var o2Tank = new OxygenTank();
+            EntityToTile(o2Tank, this[10, -3]);
+
             Player = new Player();
             AddObstacles();
             EntityToTile(Player, this[0, 0]);
@@ -337,6 +340,11 @@ namespace LudumDare41
                 if (corner2def.Solid)
                     return;
             }
+
+            if (moveDir.X < 0)
+                Player.LastMoveLeft = true;
+            else if (moveDir.X > 0)
+                Player.LastMoveLeft = false;
 
             EntityFromTile(Player);
             EntityToTile(Player, dest);

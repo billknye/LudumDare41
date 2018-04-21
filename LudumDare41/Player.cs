@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace LudumDare41
 {
@@ -12,9 +13,13 @@ namespace LudumDare41
         public float Oxygen { get; set; }
         public float MaxOxygen { get; set; }
 
+        public bool LastMoveLeft { get; set; }
+
         public override int SpriteIndex => 0;
 
         public override int LightEmitted => 4;
+
+        public override SpriteEffects SpriteEffects => (LastMoveLeft ? SpriteEffects.FlipHorizontally : SpriteEffects.None);
 
         public Player()
         {

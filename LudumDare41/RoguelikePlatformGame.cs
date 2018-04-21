@@ -173,8 +173,8 @@ namespace LudumDare41
             universe.GetTilesInRange(universe.Player.Tile.Location.X, universe.Player.Tile.Location.Y, 5, tile =>
             {
                 var spriteIndex = tile.Definition.SpriteIndex;
-                if (spriteIndex == 4)
-                    spriteIndex += Math.Abs((tile.Location.X * 23 + tile.Location.Y * 5) % 12);
+                if (spriteIndex == 8)
+                    spriteIndex += Math.Abs((tile.Location.X * 23 + tile.Location.Y * 5) % 8);
 
                 var light = tile.Light;
 
@@ -193,7 +193,7 @@ namespace LudumDare41
                 foreach(var entity in tile.Entities)
                 {
                     var entSprite = entity.SpriteIndex;
-                    spriteBatch.Draw(Assets.Sprites.SampleSprite, new Vector2((tile.Location.X - viewOffset.X) * tileSize, (tile.Location.Y - viewOffset.Y) * tileSize), new Rectangle((entSprite % 4) * 64, (entSprite / 4) * 64, tileSize, tileSize), Color.White);
+                    spriteBatch.Draw(Assets.Sprites.SampleSprite, new Vector2((tile.Location.X - viewOffset.X) * tileSize, (tile.Location.Y - viewOffset.Y) * tileSize), new Rectangle((entSprite % 4) * 64, (entSprite / 4) * 64, tileSize, tileSize), getLightColor(light), 0f, Vector2.Zero,1f, entity.SpriteEffects, 0f);
                 }               
             });
 
