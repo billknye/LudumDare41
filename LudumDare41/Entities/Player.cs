@@ -16,6 +16,12 @@ namespace LudumDare41.Entities
 
         public bool LastMoveLeft { get; set; }
 
+        public bool JetPackOn { get; set; }
+        
+        public int JetPackFuel { get; set; }
+        
+        public int MaxJetPackFuel { get; set; }
+
         public override int SpriteIndex => 0;
 
         public override int LightEmitted => 4;
@@ -26,6 +32,9 @@ namespace LudumDare41.Entities
         {
             Oxygen = MaxOxygen = 100;
             HitPoints = MaxHitPoints = 100;
+            JetPackFuel = MaxJetPackFuel = 100;
+
+            JetPackOn = false;
         }
     }
 }

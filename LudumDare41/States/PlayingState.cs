@@ -91,6 +91,10 @@ namespace LudumDare41.States
             {
                 dest = new Point(1, -1);
             }
+            if(wasKeyJustPressed(Keys.Space, keyboard, lastKeyboard))
+            {
+                universe.Player.JetPackOn = true;
+            }
 
             if (dest != Point.Zero)
             {

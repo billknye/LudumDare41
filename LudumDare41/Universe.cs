@@ -413,7 +413,24 @@ namespace LudumDare41
             EntityToTile(Player, dest);
 
 
+<<<<<<< HEAD
             Console.WriteLine(Player.Velocity);
+=======
+            var playerTile = this[Player.Tile.Location.X, Player.Tile.Location.Y];
+            foreach (var entity in playerTile.Entities)
+            {
+                if(entity is Obstacle obstacle)
+                {
+                    var damage =  rand.Next(UniverseConfiguration.ObstacleMinDamage, UniverseConfiguration.ObstacleMaxDamage);
+                    if(damage >= Player.HitPoints)
+                    {
+                        
+                    }
+
+                    Player.HitPoints -= damage;
+                }
+            }
+>>>>>>> 792044d... Added obstacle damage
         }
 
         private void Combat(Enemy enemy)
