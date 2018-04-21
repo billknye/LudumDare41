@@ -1,16 +1,18 @@
-﻿using Microsoft.Xna.Framework;
+﻿using DryIoc;
+using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 
 namespace LudumDare41.States
 {
-    public static class GameStateManager
+    public class GameStateManager
     {
-        static Stack<GameState> states;
+        Stack<GameState> states;
+        private readonly Container container;
 
-        public static GameWindow Window { get; set; }
+        public GameWindow Window { get; }
 
-        public static int GameWidth
+        public int GameWidth
         {
             get
             {
@@ -18,7 +20,7 @@ namespace LudumDare41.States
             }
         }
 
-        public static int GameHeight
+        public int GameHeight
         {
             get
             {
@@ -26,12 +28,21 @@ namespace LudumDare41.States
             }
         }
 
-        static GameStateManager()
+
+        public GameStateManager(Container container, GameWindow gameWindow)
         {
             states = new Stack<GameState>();
+            this.container = container;
+            this.Window = gameWindow;
         }
 
-        public static void Enter(GameState state)
+        public void Enter<T>() where T : GameState
+        {
+            var instance = container.New<T>();
+            Enter(instance);
+        }
+
+        public void Enter(GameState state)
         {
             if (states.Count > 0)
             {
@@ -42,7 +53,7 @@ namespace LudumDare41.States
             state.Entered();
         }
 
-        public static void Leave()
+        public void Leave()
         {
             if (states.Count > 0)
             {
@@ -65,7 +76,7 @@ namespace LudumDare41.States
             }
         }
 
-        public static void Update(GameTime gameTime)
+        public void Update(GameTime gameTime)
         {
             if (states.Count > 0)
             {
@@ -73,7 +84,7 @@ namespace LudumDare41.States
             }
         }
 
-        public static void Draw(GameTime gameTime)
+        public void Draw(GameTime gameTime)
         {
             if (states.Count > 0)
             {
