@@ -1,9 +1,11 @@
-﻿using LudumDare41.ContentManagement;
+﻿using Billknye.GameLib.Noise;
+using LudumDare41.ContentManagement;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 using System;
+using System.Collections.Generic;
 
 namespace LudumDare41
 {
@@ -14,12 +16,18 @@ namespace LudumDare41
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        KeyboardState lastKeyboard;        
+        KeyboardState lastKeyboard;
+
+        Point viewOffset;
+        Universe universe;
 
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+
+            graphics.PreferredBackBufferHeight = 768;
+            graphics.PreferredBackBufferWidth = 1280;
         }
 
         /// <summary>
@@ -30,6 +38,9 @@ namespace LudumDare41
         /// </summary>
         protected override void Initialize()
         {// TODO: Add your initialization logic here
+
+            universe = new Universe();
+            
 
             base.Initialize();
         }
@@ -45,7 +56,7 @@ namespace LudumDare41
 
             Assets.Initialize(GraphicsDevice);
 
-            MediaPlayer.Play(Assets.Songs.Intro);
+           // MediaPlayer.Play(Assets.Songs.Intro);
         }
 
         /// <summary>
@@ -74,6 +85,50 @@ namespace LudumDare41
                 Assets.SoundEffects.Coin.Play();
             }
 
+            // make move go
+            var dest = Point.Zero;
+            if (keyboard.IsKeyDown(Keys.NumPad1))
+            {
+                dest = new Point(-1, 1);
+            }
+            if (keyboard.IsKeyDown(Keys.NumPad2))
+            {
+                dest = new Point(0, 1);
+            }
+            if (keyboard.IsKeyDown(Keys.NumPad3))
+            {
+                dest = new Point(1, 1);
+            }
+            if (keyboard.IsKeyDown(Keys.NumPad4))
+            {
+                dest = new Point(-1, 0);
+            }
+            if (keyboard.IsKeyDown(Keys.NumPad6))
+            {
+                dest = new Point(1, 0);
+            }
+            if (keyboard.IsKeyDown(Keys.NumPad7))
+            {
+                dest = new Point(-1, -1);
+            }
+            if (keyboard.IsKeyDown(Keys.NumPad8))
+            {
+                dest = new Point(0, -1);
+            }
+            if (keyboard.IsKeyDown(Keys.NumPad9))
+            {
+                dest = new Point(1, -1);
+            }
+
+            universe.Player += dest;
+
+            var width = (int)Math.Ceiling(Window.ClientBounds.Width / 64.0);
+            var height = (int)Math.Ceiling(Window.ClientBounds.Height / 64.0);
+
+            // make player be center
+            viewOffset = new Point(-width / 2 + universe.Player.X, -height / 2 + universe.Player.Y);
+
+            //Console.WriteLine(viewOffset);
 
             lastKeyboard = keyboard;
             base.Update(gameTime);
@@ -85,13 +140,41 @@ namespace LudumDare41
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.NavajoWhite);
+            GraphicsDevice.Clear(Color.Black);
+
+            Color[] testColors = new Color[]
+            {
+                Color.Blue,
+                Color.White,
+                Color.Red,
+                Color.Orange,
+                Color.Yellow,
+                Color.Green,
+                Color.Magenta,
+                Color.Brown,
+                Color.Pink
+            };
 
             spriteBatch.Begin();
-            spriteBatch.Draw(Assets.Sprites.SampleSprite, Vector2.Zero, Color.FromNonPremultiplied((int)DateTime.UtcNow.Millisecond % 255, 255, 255, 255));
 
-            spriteBatch.DrawString(Assets.Fonts.Japonesa16pt, "Lorem ipsum dolor sit amet, cu est scripserit voluptatibus, cu vidit summo soluta nec. Autem saperet intellegam et ius, eos sanctus delicata an. Te eum omnium democritum. Eu per noster epicuri dissentiunt, et dolor scripserit sit. An dicam maluisset forensibus sit, pri ei stet commodo signiferumque. Eam ex graecis corrumpit.", new Vector2(0, 0), Color.Black);
-            spriteBatch.DrawString(Assets.Fonts.Japonesa16pt, "Press space for sound effect.", new Vector2(0, 200), Color.Black);
+            var viewRectangle = new Rectangle(
+                viewOffset.X,
+                viewOffset.Y,
+                (int)Math.Ceiling(Window.ClientBounds.Width / 64.0),
+                (int)Math.Ceiling(Window.ClientBounds.Height / 64.0)
+                );
+
+            Console.WriteLine(viewRectangle);
+
+            universe.GetTilesInRange(viewRectangle, tile =>
+            {
+                spriteBatch.Draw(Assets.Sprites.SampleSprite, new Vector2((tile.Location.X - viewOffset.X) * 64, (tile.Location.Y - viewOffset.Y) * 64), new Rectangle(64, 0, 64, 64), testColors[ tile.SomeTileShit % testColors.Length]);
+                spriteBatch.DrawString(Assets.Fonts.Japonesa16pt, $"{tile.Location.X},{tile.Location.Y}", new Vector2((tile.Location.X - viewOffset.X) * 64, (tile.Location.Y - viewOffset.Y) * 64 + 40), Color.Black);
+            });
+
+
+            spriteBatch.Draw(Assets.Sprites.SampleSprite, new Vector2((universe.Player.X - viewOffset.X) * 64, (universe.Player.Y - viewOffset.Y) * 64), new Rectangle(0, 0, 64, 64), Color.White);
+
 
             spriteBatch.End();
 
@@ -99,4 +182,139 @@ namespace LudumDare41
         }
     }
 
+
+    public class Universe
+    {
+        public Dictionary<Point, ChunkOfSpace> ChunksOfFreedom;
+
+        public Point Player;
+
+        SimplexNoise2D noise;
+
+        public Universe()
+        {
+            ChunksOfFreedom = new Dictionary<Point, ChunkOfSpace>();
+            noise = new SimplexNoise2D(293234, 100);
+        }
+
+        public void GetTilesInRange(Rectangle viewRectangle, Action<Tile> doThing)
+        {
+            for (int x =viewRectangle.X; x < viewRectangle.Right; x++)
+            {
+                for (int y = viewRectangle.Y; y < viewRectangle.Bottom; y++)
+                {
+                    var tile = this[x, y];
+
+                    doThing(tile);
+                }
+            }
+        }
+
+
+        public Tile this[int x, int y]
+        {
+            get
+            {
+                var chunkX = x & ~0xf;
+                var chunkY = y & ~0xf;
+
+                var localX = x & 0xf;
+                var localY = y & 0xf;
+
+                if (ChunksOfFreedom.TryGetValue(new Point(chunkX, chunkY), out var chunk))
+                {
+                    return chunk[localX, localY];
+                }
+
+                // make the thing
+                var chunk2 = generateChunk(chunkX, chunkY);
+                return chunk2[localX, localY];
+            }
+        }
+
+        private ChunkOfSpace generateChunk(int chunkX, int chunkY)
+        {
+            var chunk = new ChunkOfSpace();
+            chunk.Tiles = new Tile[16 * 16];
+
+            for (int x = 0; x < 16; x++)
+            {
+                for (int y = 0; y < 16; y++)
+                {
+                    var pos = new Point(chunkX + x, chunkY + y);
+                    chunk[x, y] = new Tile
+                    {
+                        Location = pos,
+                        SomeTileShit = (byte)(noise.GetValue(chunkX + x, chunkY + y) * 10)
+                    };
+                }
+            }
+
+            ChunksOfFreedom[new Point(chunkX, chunkY)] = chunk;
+
+
+            return chunk;
+
+        }
+
+        public void EntityToTile(Entity entity, Tile tile)
+        {
+            entity.Tile = tile;
+            tile.Entities.Add(entity);
+        }
+
+        public void EntityFromTile(Entity entity)
+        {
+            entity.Tile.Entities.Remove(entity);
+            entity.Tile = null;
+        }
+    }
+
+
+
+    public class ChunkOfSpace
+    {
+        public Tile[] Tiles;
+
+        public Tile this[int x, int y]
+        {
+            get
+            {
+                if (x < 0 || x >= 16 || y < 0 || y >= 16)
+                    return null;
+
+                return Tiles[x | y << 4];
+            }
+            set
+            {
+                if (x < 0 || x >= 16 || y < 0 || y >= 16)
+                    throw new Exception("nope");
+
+                Tiles[x | y << 4] = value;
+            }
+        }
+
+        public ChunkOfSpace()
+        {
+        }
+    }
+
+    public class Entity
+    {
+        public Tile Tile;
+    }
+
+    public class Tile
+    {
+        public Point Location;
+
+        public byte SomeTileShit;
+
+        public List<Entity> Entities;
+
+        public Tile()
+        {
+            Entities = new List<Entity>();
+        }
+    }
 }

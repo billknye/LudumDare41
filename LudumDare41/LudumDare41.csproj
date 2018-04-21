@@ -46,6 +46,7 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="SimplexNoise2D.cs" />
     <None Include="libopenal.1.dylib">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -53,7 +54,15 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="MonoGame.Framework.dll.config" />
-    <Compile Include="**/*.cs" />
+    <Compile Include="Assets.cs" />
+    <Compile Include="ContentManagement\CustomContentManager.cs" />
+    <Compile Include="ContentManagement\OggSoundEffectLoader.cs" />
+    <Compile Include="ContentManagement\TrueTypeFontLoader.cs" />
+    <Compile Include="ContentManagement\TrueTypeSpriteFont.cs" />
+    <Compile Include="ContentManagement\TrueTypeSpriteFontSpriteBatchEx.cs" />
+    <Compile Include="Game1.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
     <None Include="x64\libopenal.so.1">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
