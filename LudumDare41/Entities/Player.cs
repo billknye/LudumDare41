@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace LudumDare41
+namespace LudumDare41.Entities
 {
     public class Player : Entity
     {

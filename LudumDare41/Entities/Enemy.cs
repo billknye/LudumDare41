@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework;
 using System;
 
-namespace LudumDare41
+namespace LudumDare41.Entities
 {
     public class Enemy : Entity
     {

@@ -1,6 +1,7 @@
 ﻿using Billknye.GameLib;
 using Billknye.GameLib.Noise;
 using DryIoc;
+using LudumDare41.Entities;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;

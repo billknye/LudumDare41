@@ -47,7 +47,7 @@
     <Compile Include="ChunkOfSpace.cs" />
     <Compile Include="Entities\Behavior\EntityBehavior.cs" />
     <Compile Include="Entities\Item.cs" />
-    <Compile Include="OxygenTank.cs" />
+    <Compile Include="Entities\OxygenTank.cs" />
     <Compile Include="States\GameState.cs" />
     <Compile Include="States\GameStateManager.cs" />
     <Compile Include="States\GameOverState.cs" />

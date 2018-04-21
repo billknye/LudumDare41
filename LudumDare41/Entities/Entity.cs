@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using System;
 
-namespace LudumDare41
+namespace LudumDare41.Entities
 {
     public abstract class Entity
     {

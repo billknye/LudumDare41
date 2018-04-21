@@ -1,4 +1,5 @@
 ﻿using DryIoc;
+using LudumDare41.Entities;
 using LudumDare41.Entities.Behavior;
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
