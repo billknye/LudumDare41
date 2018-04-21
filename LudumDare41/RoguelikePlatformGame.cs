@@ -149,7 +149,7 @@ namespace LudumDare41
 
             Color[] testColors = new Color[]
             {
-                Color.Blue,
+                Color.Black,
                 Color.White,
                 Color.Red,
                 Color.Orange,
