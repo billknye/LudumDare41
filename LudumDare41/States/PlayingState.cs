@@ -90,7 +90,7 @@ namespace LudumDare41.States
             {
                 universe.DoMove(dest);
 
-                if (universe.Player.Oxygen <= 0)
+                if ((universe.Player.Oxygen <= 0) || (universe.Player.HitPoints <= 0))
                 {
                     GameStateManager.Leave();
                     GameStateManager.Enter(new GameOverState());
@@ -161,9 +161,11 @@ namespace LudumDare41.States
                 spriteBatch.Draw(Assets.Sprites.PixelTexture, new Rectangle(0, 0, GameStateManager.GameWidth, GameStateManager.GameHeight), Color.FromNonPremultiplied(0, 0, 0, (int)(30 - universe.Player.Oxygen) * 8));
             }
 
+            //HitPoints
+            spriteBatch.DrawString(Assets.Fonts.Japonesa16pt, universe.Player.HitPoints.ToString(), new Vector2(0, 0), Color.Green);
+
             spriteBatch.End();
         }
-
 
         private Color getLightColor(int light)
         {
@@ -173,6 +175,4 @@ namespace LudumDare41.States
             return new Color(num, num, num);
         }
     }
-
-
 }

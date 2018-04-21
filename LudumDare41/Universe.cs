@@ -444,6 +444,7 @@ namespace LudumDare41
                     Console.WriteLine(); // what do
                 }
 
+                //Both 
                 if (enemy.Tile.Location == Player.Tile.Location)
                 {
                     Combat(enemy);
@@ -453,8 +454,8 @@ namespace LudumDare41
 
         private void Combat(Enemy enemy)
         {
-            Player.HitPoints = Player.HitPoints - rand.Next(1, enemy.BaseAttack);
-            enemy.HitPoints = enemy.HitPoints - rand.Next(1, Player.BaseAttack);
+                Player.HitPoints = Player.HitPoints - rand.Next(1, enemy.BaseAttack);
+                enemy.HitPoints = enemy.HitPoints - rand.Next(1, Player.BaseAttack);                     
         }
     }
 }
