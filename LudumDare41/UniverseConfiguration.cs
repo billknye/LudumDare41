@@ -11,5 +11,8 @@ namespace LudumDare41
         public const int TileSize = 64;
         public const int MinNumberOfObstacles = 100;
         public const int MaxNumberOfObstacles = 100;
+        public const int NumberOfEnemies = 100;
+        public const int MinEnemyHP = 100;
+        public const int MaxEnemyHP = 100;
     }
 }
