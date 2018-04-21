@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using LudumDare41.ContentManagement;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
 namespace LudumDare41.States
@@ -16,10 +17,13 @@ namespace LudumDare41.States
 
         Point viewOffset;
         Universe universe;
+        private readonly GameStateManager gameStateManager;
+        private readonly SpriteBatch spriteBatch;
 
-        public PlayingState()
+        public PlayingState(GameStateManager gameStateManager, SpriteBatch spriteBatch)
         {
-
+            this.gameStateManager = gameStateManager;
+            this.spriteBatch = spriteBatch;
         }
 
         public override void Entered()
@@ -88,17 +92,17 @@ namespace LudumDare41.States
 
             if (dest != Point.Zero)
             {
-                universe.DoMove(dest);
+                universe.DoTick(dest);
 
                 if (universe.Player.Oxygen <= 0)
                 {
-                    GameStateManager.Leave();
-                    GameStateManager.Enter(new GameOverState());
+                    gameStateManager.Leave();
+                    gameStateManager.Enter<GameOverState>();
                 }
             }
 
-            var width = (int)Math.Ceiling(GameStateManager.Window.ClientBounds.Width / (double)UniverseConfiguration.TileSize);
-            var height = (int)Math.Ceiling(GameStateManager.Window.ClientBounds.Height / (double)UniverseConfiguration.TileSize);
+            var width = (int)Math.Ceiling(gameStateManager.Window.ClientBounds.Width / (double)UniverseConfiguration.TileSize);
+            var height = (int)Math.Ceiling(gameStateManager.Window.ClientBounds.Height / (double)UniverseConfiguration.TileSize);
 
             // make player be center
             viewOffset = new Point(-width / 2 + universe.Player.Tile.Location.X, -height / 2 + universe.Player.Tile.Location.Y);
@@ -116,8 +120,6 @@ namespace LudumDare41.States
 
         public override void Draw(GameTime gameTime)
         {
-            var spriteBatch = Assets.Game.SpriteBatch;
-
             spriteBatch.Begin();
 
             var availableMoves = universe.GetAvailableMoves().ToList();
@@ -139,7 +141,7 @@ namespace LudumDare41.States
                     var loc = new Vector2((tile.Location.X - viewOffset.X) * 64, (tile.Location.Y - viewOffset.Y) * 64);
                     moveThings.Add(Tuple.Create(new Rectangle((int)loc.X, (int)loc.Y, 64, 64), tile.Location));
                     spriteBatch.Draw(Assets.Sprites.SampleSprite, loc, new Rectangle(192, 0, 64, 64),
-                        Color.FromNonPremultiplied(0, 255, 0, 255 - (int)(Vector2.Distance(new Vector2(GameStateManager.GameWidth / 2, GameStateManager.GameHeight / 2), new Vector2(lastMouse.Position.X, lastMouse.Position.Y))))
+                        Color.FromNonPremultiplied(0, 255, 0, 255 - (int)(Vector2.Distance(new Vector2(gameStateManager.GameWidth / 2, gameStateManager.GameHeight / 2), new Vector2(lastMouse.Position.X, lastMouse.Position.Y))))
                         );
                 }
 
@@ -154,11 +156,11 @@ namespace LudumDare41.States
             // UI
 
             // oxygen bar
-            spriteBatch.Draw(Assets.Sprites.PixelTexture, new Rectangle(0, GameStateManager.GameHeight - 12, (int)(GameStateManager.GameWidth * universe.Player.Oxygen / universe.Player.MaxOxygen), 12), Color.DarkCyan);
+            spriteBatch.Draw(Assets.Sprites.PixelTexture, new Rectangle(0, gameStateManager.GameHeight - 12, (int)(gameStateManager.GameWidth * universe.Player.Oxygen / universe.Player.MaxOxygen), 12), Color.DarkCyan);
 
             if (universe.Player.Oxygen < 30)
             {
-                spriteBatch.Draw(Assets.Sprites.PixelTexture, new Rectangle(0, 0, GameStateManager.GameWidth, GameStateManager.GameHeight), Color.FromNonPremultiplied(0, 0, 0, (int)(30 - universe.Player.Oxygen) * 8));
+                spriteBatch.Draw(Assets.Sprites.PixelTexture, new Rectangle(0, 0, gameStateManager.GameWidth, gameStateManager.GameHeight), Color.FromNonPremultiplied(0, 0, 0, (int)(30 - universe.Player.Oxygen) * 8));
             }
 
             spriteBatch.End();

@@ -27,5 +27,13 @@ namespace LudumDare41
         public ChunkOfSpace()
         {
         }
+
+        public void Tick()
+        {
+            foreach (var tile in Tiles)
+            {
+                tile.Tick();
+            }
+        }
     }
 }

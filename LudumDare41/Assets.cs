@@ -13,11 +13,6 @@ namespace LudumDare41
 {
     public static class Assets
     {
-        public static class Game
-        {
-            public static SpriteBatch SpriteBatch;
-        }
-
         public static class Sprites
         {
             public static Texture2D PixelTexture;
@@ -41,9 +36,6 @@ namespace LudumDare41
 
         public static void Initialize(GraphicsDevice graphicsDevice)
         {
-            // Create a new SpriteBatch, which can be used to draw textures.
-            Game.SpriteBatch = new SpriteBatch(graphicsDevice);
-
             var contentManager = new CustomContentManager(graphicsDevice, "Content");
 
             Sprites.PixelTexture = new Texture2D(graphicsDevice, 1, 1); Sprites.PixelTexture.SetData(new Color[] { Color.White });

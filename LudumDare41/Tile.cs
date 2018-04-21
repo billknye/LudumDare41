@@ -26,6 +26,14 @@ namespace LudumDare41
             Entities = new List<Entity>();
         }
 
+        public void Tick()
+        {
+            foreach (var ent in Entities)
+            {
+                ent.Tick();
+            }
+        }
+
 
     }
 }
