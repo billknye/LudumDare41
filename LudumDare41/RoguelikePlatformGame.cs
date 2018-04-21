@@ -190,7 +190,7 @@ namespace LudumDare41
 
             moveThings.Clear();
 
-            universe.GetTilesInRange(viewRectangle, tile =>
+            universe.GetTilesInRange(universe.Player.Tile.Location.X, universe.Player.Tile.Location.Y, 5, tile =>
             {
                 spriteBatch.Draw(Assets.Sprites.SampleSprite, new Vector2((tile.Location.X - viewOffset.X) * 64, (tile.Location.Y - viewOffset.Y) * 64), new Rectangle(64, 0, 64, 64), testColors[ tile.SomeTileShit % testColors.Length]);
                 

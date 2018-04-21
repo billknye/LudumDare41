@@ -1,4 +1,5 @@
-﻿using Billknye.GameLib.Noise;
+﻿using Billknye.GameLib;
+using Billknye.GameLib.Noise;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
@@ -12,6 +13,7 @@ namespace LudumDare41
         public Player Player;
         public List<Obstacle> Obstacles;
 
+        GridFieldOfView gridFieldOfView;
         Random r;
         SimplexNoise2D noise;
 
@@ -20,11 +22,16 @@ namespace LudumDare41
             ChunksOfFreedom = new Dictionary<Point, ChunkOfSpace>();
 
             r = new Random();
-            noise = new SimplexNoise2D(293234, 100);
+            noise = new SimplexNoise2D(2235, 40);
 
             var chunk = generateChunk(0, 0);
 
-            chunk[0, 1].SomeTileShit = 1;
+            
+
+            for (int x = 0; x < 10; x++)
+            {
+                chunk[x, 1].SomeTileShit = 1;
+            }
 
             Player = new Player();
             Obstacles = new List<Obstacle>();
@@ -46,9 +53,19 @@ namespace LudumDare41
             }
         }
 
-        public void GetTilesInRange(Rectangle viewRectangle, Action<Tile> doThing)
+        public void GetTilesInRange(int centerX, int centerY, int radius, Action<Tile> doThing)
         {
-            for (int x = viewRectangle.X; x < viewRectangle.Right; x++)
+            GridFieldOfView.ComputeFieldOfViewWithShadowCasting(centerX, centerY, radius, (x, y) =>
+            {
+                return isOpaque(new Point(x, y));
+            }, (x, y) =>
+            {
+                var tile = this[x, y];
+                doThing(tile);
+            });
+
+
+            /*for (int x = viewRectangle.X; x < viewRectangle.Right; x++)
             {
                 for (int y = viewRectangle.Y; y < viewRectangle.Bottom; y++)
                 {
@@ -56,7 +73,7 @@ namespace LudumDare41
 
                     doThing(tile);
                 }
-            }
+            }*/
         }
 
         public Tile this[int x, int y]
@@ -214,6 +231,14 @@ namespace LudumDare41
             var dest = this[point.X, point.Y];
             var destDef = TileDefinition.Definitions[dest.SomeTileShit];
 
+            return destDef.Opaque;
+        }
+
+        private bool isOpaque(Point point)
+        {
+            var dest = this[point.X, point.Y];
+            var destDef = TileDefinition.Definitions[dest.SomeTileShit];
+
             return destDef.Solid;
         }
 
@@ -224,6 +249,11 @@ namespace LudumDare41
 
         internal void DoMove(Point moveDir)
         {
+            if (!canMove(Player, Player.Tile.Location, moveDir))
+            {
+                return; // no thanks 
+            }
+
             if (Player.Velocity == Point.Zero && isOnLand(Player))
             {
                 Player.Velocity = new Point(moveDir.X * 3, moveDir.Y * 3);
@@ -393,11 +423,21 @@ namespace LudumDare41
                     return false;
                 }
             }
+
+            public virtual bool Opaque
+            {
+                get
+                {
+                    return false;
+                }
+            }
         }
 
         public class SolidTileDefinition : TileDefinition
         {
             public override bool Solid => true;
+
+            public override bool Opaque => true;
         }
     }
 }
