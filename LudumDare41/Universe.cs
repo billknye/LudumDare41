@@ -450,18 +450,18 @@ namespace LudumDare41
                 }
             }
 
-
-
-            var tile1 = this[Player.Tile.Location.X, Player.Tile.Location.Y];
-            foreach (var entity in tile1.Entities)
+            var playerTile = this[Player.Tile.Location.X, Player.Tile.Location.Y];
+            foreach (var entity in playerTile.Entities)
             {
                 if(entity is Obstacle obstacle)
                 {
-                    var damage =  r.Next(UniverseConfiguration.ObstacleMinDamage, UniverseConfiguration.ObstacleMaxDamage);
+                    var damage =  rand.Next(UniverseConfiguration.ObstacleMinDamage, UniverseConfiguration.ObstacleMaxDamage);
                     if(damage >= Player.HitPoints)
                     {
                         // END THE GAME!!?!?!?!?!?!!
                     }
+
+                    Player.HitPoints -= damage;
                 }
             }
         }
