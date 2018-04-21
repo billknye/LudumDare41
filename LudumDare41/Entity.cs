@@ -11,5 +11,10 @@ namespace LudumDare41
         public virtual int LightEmitted => 0;
 
         public virtual SpriteEffects SpriteEffects => SpriteEffects.None;
+
+        public virtual void Tick()
+        {
+
+        }
     }
 }

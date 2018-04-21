@@ -297,7 +297,23 @@ namespace LudumDare41
             return isSolid(entity.Tile.Location + new Point(0, 1));
         }
 
-        internal void DoMove(Point moveDir)
+        internal void DoTick(Point? moveDir = null)
+        {
+            if (moveDir != null)
+            {
+                doPlayerMove(moveDir.Value);
+            }
+
+            // tick!
+            Player.Oxygen--;
+
+            foreach (var chunk in ChunksOfFreedom)
+            {
+                chunk.Value.Tick();
+            }
+        }
+
+        private void doPlayerMove(Point moveDir)
         {
             if (!canMove(Player, Player.Tile.Location, moveDir))
             {
@@ -365,11 +381,6 @@ namespace LudumDare41
             {
                 Player.Velocity = Point.Zero;
             }
-
-            // tick!
-            Player.Oxygen--;
-
-            attackTheThings();
         }
 
         private void attackTheThings()
@@ -444,6 +455,7 @@ namespace LudumDare41
                     Console.WriteLine(); // what do
                 }
 
+                //Both 
                 if (enemy.Tile.Location == Player.Tile.Location)
                 {
                     Combat(enemy);
@@ -468,8 +480,8 @@ namespace LudumDare41
 
         private void Combat(Enemy enemy)
         {
-            Player.HitPoints = Player.HitPoints - rand.Next(1, enemy.BaseAttack);
-            enemy.HitPoints = enemy.HitPoints - rand.Next(1, Player.BaseAttack);
+                Player.HitPoints = Player.HitPoints - rand.Next(1, enemy.BaseAttack);
+                enemy.HitPoints = enemy.HitPoints - rand.Next(1, Player.BaseAttack);                     
         }
     }
 }

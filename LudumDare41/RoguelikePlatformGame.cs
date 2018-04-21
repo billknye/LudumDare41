@@ -1,4 +1,5 @@
-﻿using LudumDare41.ContentManagement;
+﻿using DryIoc;
+using LudumDare41.ContentManagement;
 using LudumDare41.States;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -16,7 +17,8 @@ namespace LudumDare41
     public class RoguelikePlatformGame : Game
     {
         const int tileSize = UniverseConfiguration.TileSize;
-        GraphicsDeviceManager graphics;        
+        GraphicsDeviceManager graphics;
+        GameStateManager gameStateManager;
 
         public RoguelikePlatformGame()
         {
@@ -37,8 +39,20 @@ namespace LudumDare41
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-            GameStateManager.Window = Window;
-            GameStateManager.Enter(new IntroState());
+            
+            Container container = new Container();
+
+            container.RegisterInstance(GraphicsDevice);
+            container.Register<SpriteBatch>(Reuse.Singleton);
+            container.RegisterInstance<GameWindow>(Window);
+            container.RegisterInstance(container);
+            container.Register<GameStateManager>(Reuse.Singleton);
+            container.Register<Universe>(Reuse.Singleton);
+
+            gameStateManager = container.Resolve<GameStateManager>();
+            var intro = container.New<IntroState>();
+            gameStateManager.Enter(intro);
+
             base.Initialize();
         }
 
@@ -71,7 +85,7 @@ namespace LudumDare41
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
             
-            GameStateManager.Update(gameTime);
+            gameStateManager.Update(gameTime);
             return;
             
         }
@@ -83,7 +97,7 @@ namespace LudumDare41
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.Black);
-            GameStateManager.Draw(gameTime);
+            gameStateManager.Draw(gameTime);
             return;
         }
 
