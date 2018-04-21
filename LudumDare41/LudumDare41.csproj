@@ -46,7 +46,11 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="ChunkOfSpace.cs" />
+    <Compile Include="Entity.cs" />
     <Compile Include="SimplexNoise2D.cs" />
+    <Compile Include="Tile.cs" />
+    <Compile Include="Universe.cs" />
     <None Include="libopenal.1.dylib">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -60,7 +64,7 @@
     <Compile Include="ContentManagement\TrueTypeFontLoader.cs" />
     <Compile Include="ContentManagement\TrueTypeSpriteFont.cs" />
     <Compile Include="ContentManagement\TrueTypeSpriteFontSpriteBatchEx.cs" />
-    <Compile Include="Game1.cs" />
+    <Compile Include="RoguelikePlatformGame.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <None Include="x64\libopenal.so.1">

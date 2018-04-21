@@ -1,18 +1,16 @@
-﻿using Billknye.GameLib.Noise;
-using LudumDare41.ContentManagement;
+﻿using LudumDare41.ContentManagement;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 using System;
-using System.Collections.Generic;
 
 namespace LudumDare41
 {
     /// <summary>
     /// This is the main type for your game.
     /// </summary>
-    public class Game1 : Game
+    public class RoguelikePlatformGame : Game
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
@@ -21,7 +19,7 @@ namespace LudumDare41
         Point viewOffset;
         Universe universe;
 
-        public Game1()
+        public RoguelikePlatformGame()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
@@ -122,14 +120,14 @@ namespace LudumDare41
 
             if (dest != Point.Zero)
             {
-                universe.DoMove(universe.Player + dest);                
+                universe.DoMove(universe.Player.Tile.Location + dest);                
             }
 
             var width = (int)Math.Ceiling(Window.ClientBounds.Width / 64.0);
             var height = (int)Math.Ceiling(Window.ClientBounds.Height / 64.0);
 
             // make player be center
-            viewOffset = new Point(-width / 2 + universe.Player.X, -height / 2 + universe.Player.Y);
+            viewOffset = new Point(-width / 2 + universe.Player.Tile.Location.X, -height / 2 + universe.Player.Tile.Location.Y);
 
             //Console.WriteLine(viewOffset);
 
@@ -181,155 +179,12 @@ namespace LudumDare41
             });
 
 
-            spriteBatch.Draw(Assets.Sprites.SampleSprite, new Vector2((universe.Player.X - viewOffset.X) * 64, (universe.Player.Y - viewOffset.Y) * 64), new Rectangle(0, 0, 64, 64), Color.White);
+            spriteBatch.Draw(Assets.Sprites.SampleSprite, new Vector2((universe.Player.Tile.Location.X - viewOffset.X) * 64, (universe.Player.Tile.Location.Y - viewOffset.Y) * 64), new Rectangle(0, 0, 64, 64), Color.White);
 
 
             spriteBatch.End();
 
             base.Draw(gameTime);
-        }
-    }
-
-
-    public class Universe
-    {
-        public Dictionary<Point, ChunkOfSpace> ChunksOfFreedom;
-
-        public Point Player;
-
-        SimplexNoise2D noise;
-
-        public Universe()
-        {
-            ChunksOfFreedom = new Dictionary<Point, ChunkOfSpace>();
-            noise = new SimplexNoise2D(293234, 100);
-        }
-
-        public void GetTilesInRange(Rectangle viewRectangle, Action<Tile> doThing)
-        {
-            for (int x =viewRectangle.X; x < viewRectangle.Right; x++)
-            {
-                for (int y = viewRectangle.Y; y < viewRectangle.Bottom; y++)
-                {
-                    var tile = this[x, y];
-
-                    doThing(tile);
-                }
-            }
-        }
-
-
-        public Tile this[int x, int y]
-        {
-            get
-            {
-                var chunkX = x & ~0xf;
-                var chunkY = y & ~0xf;
-
-                var localX = x & 0xf;
-                var localY = y & 0xf;
-
-                if (ChunksOfFreedom.TryGetValue(new Point(chunkX, chunkY), out var chunk))
-                {
-                    return chunk[localX, localY];
-                }
-
-                // make the thing
-                var chunk2 = generateChunk(chunkX, chunkY);
-                return chunk2[localX, localY];
-            }
-        }
-
-        private ChunkOfSpace generateChunk(int chunkX, int chunkY)
-        {
-            var chunk = new ChunkOfSpace();
-            chunk.Tiles = new Tile[16 * 16];
-
-            for (int x = 0; x < 16; x++)
-            {
-                for (int y = 0; y < 16; y++)
-                {
-                    var pos = new Point(chunkX + x, chunkY + y);
-                    chunk[x, y] = new Tile
-                    {
-                        Location = pos,
-                        SomeTileShit = (byte)(noise.GetValue(chunkX + x, chunkY + y) * 10)
-                    };
-                }
-            }
-
-            ChunksOfFreedom[new Point(chunkX, chunkY)] = chunk;
-
-
-            return chunk;
-
-        }
-
-        public void EntityToTile(Entity entity, Tile tile)
-        {
-            entity.Tile = tile;
-            tile.Entities.Add(entity);
-        }
-
-        public void EntityFromTile(Entity entity)
-        {
-            entity.Tile.Entities.Remove(entity);
-            entity.Tile = null;
-        }
-
-        internal void DoMove(Point point)
-        {
-            Player = point;
-
-            // tick!
-        }
-    }
-
-
-
-    public class ChunkOfSpace
-    {
-        public Tile[] Tiles;
-
-        public Tile this[int x, int y]
-        {
-            get
-            {
-                if (x < 0 || x >= 16 || y < 0 || y >= 16)
-                    return null;
-
-                return Tiles[x | y << 4];
-            }
-            set
-            {
-                if (x < 0 || x >= 16 || y < 0 || y >= 16)
-                    throw new Exception("nope");
-
-                Tiles[x | y << 4] = value;
-            }
-        }
-
-        public ChunkOfSpace()
-        {
-        }
-    }
-
-    public class Entity
-    {
-        public Tile Tile;
-    }
-
-    public class Tile
-    {
-        public Point Location;
-
-        public byte SomeTileShit;
-
-        public List<Entity> Entities;
-
-        public Tile()
-        {
-            Entities = new List<Entity>();
         }
     }
 }
