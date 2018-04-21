@@ -9,18 +9,19 @@ namespace LudumDare41
     public partial class Universe
     {
         public Dictionary<Point, ChunkOfSpace> ChunksOfFreedom;
-
         public Player Player;
 
+        Random rand;
         GridFieldOfView gridFieldOfView;
-        Random r;
         SimplexNoise2D noise;
 
         public Universe()
         {
+            int seed = DateTime.Now.Millisecond;
+            rand = new Random(seed);
+
             ChunksOfFreedom = new Dictionary<Point, ChunkOfSpace>();
 
-            r = new Random();
             noise = new SimplexNoise2D(2235, 40);
 
             var chunk = generateChunk(0, 0);
@@ -30,24 +31,35 @@ namespace LudumDare41
                 chunk[x, 1].SomeTileShit = 1;
             }
 
+            //REMOVE THIS. Set single enemy close to player
+            var singleEnemy = new Enemy() { HitPoints = UniverseConfiguration.EnemyMaxHP, BaseAttack = UniverseConfiguration.EnemyBaseAttack };
+            EntityToTile(singleEnemy, this[3, 0]);
+
             var o2Tank = new OxygenTank();
             EntityToTile(o2Tank, this[10, -3]);
 
-            Player = new Player();
-            AddObstacles();
+            Player = new Player() { HitPoints = UniverseConfiguration.PlayerInitialHP, BaseAttack = UniverseConfiguration.PlayerBaseAttack };
             EntityToTile(Player, this[0, 0]);
+
+            AddObstacles();
+            AddEnemies();
+        }
+
+        private void AddEnemies()
+        {
+            for (int i = 0; i <= UniverseConfiguration.NumberOfEnemies; i++)
+            {
+                Enemy enemy = new Enemy() { HitPoints = rand.Next(UniverseConfiguration.EnemyMinHP, UniverseConfiguration.EnemyMaxHP), BaseAttack = UniverseConfiguration.EnemyBaseAttack };
+                EntityToTile(enemy, this[rand.Next(1, UniverseConfiguration.NumberOfEnemies), rand.Next(1, UniverseConfiguration.NumberOfEnemies)]);
+            }
         }
 
         private void AddObstacles()
         {
-            //TODO: IMPROVE THIS SHIT
-            int seed = DateTime.Now.Millisecond;
-            Random numberOfObstacles = new Random(seed);
-
-            for (int i = 0; i <= numberOfObstacles.Next(UniverseConfiguration.MinNumberOfObstacles, UniverseConfiguration.MaxNumberOfObstacles); i++)
+            for (int i = 0; i <= rand.Next(UniverseConfiguration.MinNumberOfObstacles, UniverseConfiguration.MaxNumberOfObstacles); i++)
             {
                 Obstacle obstacle = new Obstacle() { Destructible = true };
-                EntityToTile(obstacle, this[numberOfObstacles.Next(1, UniverseConfiguration.MaxNumberOfObstacles), numberOfObstacles.Next(1, UniverseConfiguration.MaxNumberOfObstacles)]);
+                EntityToTile(obstacle, this[rand.Next(1, UniverseConfiguration.MaxNumberOfObstacles), rand.Next(1, UniverseConfiguration.MaxNumberOfObstacles)]);
             }
         }
 
@@ -373,7 +385,7 @@ namespace LudumDare41
                     {
                         if (entity is Enemy enemy)
                         {
-                            if (r.Next(0, 100) > 30) // move to attack 70%
+                            if (rand.Next(0, 100) > 30) // move to attack 70%
                             {
                                 entitiesToMove.Add(enemy);
                             }
@@ -384,44 +396,21 @@ namespace LudumDare41
 
             foreach (var enemy in entitiesToMove)
             {
-                {
-                    // move towards da player...
-                    var dx = Math.Sign(Player.Tile.Location.X - enemy.Tile.Location.X);
-                    var dy = Math.Sign(Player.Tile.Location.Y - enemy.Tile.Location.Y);
+                // move towards da player...
+                var dx = Math.Sign(Player.Tile.Location.X - enemy.Tile.Location.X);
+                var dy = Math.Sign(Player.Tile.Location.Y - enemy.Tile.Location.Y);
 
-                    if (dx != 0 && dy == 0)
-                    {
-                        var move = r.Next(0, 3);
-                        if (move == 1)
-                        {
-                            var destPt = enemy.Tile.Location + new Point(dx, 0);
-                            var dest = this[destPt.X, destPt.Y];
-                            EntityFromTile(enemy);
-                            EntityToTile(enemy, dest);
-                        }
-                        else if (move == 0)
-                        {
-                            var destPt = enemy.Tile.Location + new Point(0, dy);
-                            var dest = this[destPt.X, destPt.Y];
-                            EntityFromTile(enemy);
-                            EntityToTile(enemy, dest);
-                        }
-                        else
-                        {
-                            var destPt = enemy.Tile.Location + new Point(dx, dy);
-                            var dest = this[destPt.X, destPt.Y];
-                            EntityFromTile(enemy);
-                            EntityToTile(enemy, dest);
-                        }
-                    }
-                    else if (dx != 0)
+                if (dx != 0 && dy == 0)
+                {
+                    var move = rand.Next(0, 3);
+                    if (move == 1)
                     {
                         var destPt = enemy.Tile.Location + new Point(dx, 0);
                         var dest = this[destPt.X, destPt.Y];
                         EntityFromTile(enemy);
                         EntityToTile(enemy, dest);
                     }
-                    else if (dy != 0)
+                    else if (move == 0)
                     {
                         var destPt = enemy.Tile.Location + new Point(0, dy);
                         var dest = this[destPt.X, destPt.Y];
@@ -430,8 +419,34 @@ namespace LudumDare41
                     }
                     else
                     {
-                        Console.WriteLine(); // what do
+                        var destPt = enemy.Tile.Location + new Point(dx, dy);
+                        var dest = this[destPt.X, destPt.Y];
+                        EntityFromTile(enemy);
+                        EntityToTile(enemy, dest);
                     }
+                }
+                else if (dx != 0)
+                {
+                    var destPt = enemy.Tile.Location + new Point(dx, 0);
+                    var dest = this[destPt.X, destPt.Y];
+                    EntityFromTile(enemy);
+                    EntityToTile(enemy, dest);
+                }
+                else if (dy != 0)
+                {
+                    var destPt = enemy.Tile.Location + new Point(0, dy);
+                    var dest = this[destPt.X, destPt.Y];
+                    EntityFromTile(enemy);
+                    EntityToTile(enemy, dest);
+                }
+                else
+                {
+                    Console.WriteLine(); // what do
+                }
+
+                if (enemy.Tile.Location == Player.Tile.Location)
+                {
+                    Combat(enemy);
                 }
             }
 
@@ -449,6 +464,12 @@ namespace LudumDare41
                     }
                 }
             }
+        }
+
+        private void Combat(Enemy enemy)
+        {
+            Player.HitPoints = Player.HitPoints - rand.Next(1, enemy.BaseAttack);
+            enemy.HitPoints = enemy.HitPoints - rand.Next(1, Player.BaseAttack);
         }
     }
 }
