@@ -4,6 +4,8 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace LudumDare41
 {
@@ -16,6 +18,9 @@ namespace LudumDare41
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         KeyboardState lastKeyboard;
+        MouseState lastMouse;
+
+        List<Tuple<Rectangle, Point>> moveThings;
 
         Point viewOffset;
         Universe universe;
@@ -25,6 +30,7 @@ namespace LudumDare41
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
 
+            this.IsMouseVisible = true;
             graphics.PreferredBackBufferHeight = 768;
             graphics.PreferredBackBufferWidth = 1280;
         }
@@ -39,7 +45,7 @@ namespace LudumDare41
         {// TODO: Add your initialization logic here
 
             universe = new Universe();
-            
+            moveThings = new List<Tuple<Rectangle, Point>>();
 
             base.Initialize();
         }
@@ -77,15 +83,24 @@ namespace LudumDare41
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
+            MouseState mouse = Mouse.GetState();
             KeyboardState keyboard = Keyboard.GetState();
 
-            if (keyboard.IsKeyDown(Keys.Space) && lastKeyboard.IsKeyUp(Keys.Space))
-            {
-                Assets.SoundEffects.Coin.Play();
-            }
 
             // make move go
             var dest = Point.Zero;
+
+            if (lastMouse.LeftButton == ButtonState.Released && mouse.LeftButton == ButtonState.Pressed)
+            {
+                foreach (var rect in moveThings)
+                {
+                    if (rect.Item1.Contains(mouse.Position))
+                    {
+                        dest = rect.Item2 - universe.Player.Tile.Location;
+                    }
+                }
+            }
+
             if (wasKeyJustPressed(Keys.NumPad1, keyboard, lastKeyboard))
             {
                 dest = new Point(-1, 1);
@@ -131,6 +146,7 @@ namespace LudumDare41
             viewOffset = new Point(-width / 2 + universe.Player.Tile.Location.X, -height / 2 + universe.Player.Tile.Location.Y);
 
 
+            lastMouse = mouse;
             lastKeyboard = keyboard;
             base.Update(gameTime);
         }
@@ -170,12 +186,25 @@ namespace LudumDare41
                 (int)Math.Ceiling(Window.ClientBounds.Height / (double)tileSize)
                 );
 
+            var availableMoves = universe.GetAvailableMoves().ToList();
+
+            moveThings.Clear();
 
             universe.GetTilesInRange(viewRectangle, tile =>
             {
-                spriteBatch.Draw(Assets.Sprites.SampleSprite, new Vector2((tile.Location.X - viewOffset.X) * tileSize, (tile.Location.Y - viewOffset.Y) * tileSize), new Rectangle(tileSize, 0, tileSize, tileSize), testColors[ tile.SomeTileShit % testColors.Length]);
-                spriteBatch.DrawString(Assets.Fonts.Japonesa16pt, $"{tile.Location.X},{tile.Location.Y}", new Vector2((tile.Location.X - viewOffset.X) * tileSize, (tile.Location.Y - viewOffset.Y) * tileSize + 40), Color.Black);
+                spriteBatch.Draw(Assets.Sprites.SampleSprite, new Vector2((tile.Location.X - viewOffset.X) * 64, (tile.Location.Y - viewOffset.Y) * 64), new Rectangle(64, 0, 64, 64), testColors[ tile.SomeTileShit % testColors.Length]);
+                
+                if (availableMoves.Contains(tile))
+                {
+                    var loc = new Vector2((tile.Location.X - viewOffset.X) * 64, (tile.Location.Y - viewOffset.Y) * 64);
 
+                    moveThings.Add(Tuple.Create(new Rectangle((int)loc.X, (int)loc.Y, 64, 64), tile.Location));
+
+                    spriteBatch.Draw(Assets.Sprites.SampleSprite, loc, new Rectangle(64, 0, 64, 64), Color.Lime);
+                }
+
+                spriteBatch.DrawString(Assets.Fonts.Japonesa16pt, $"{tile.Location.X},{tile.Location.Y}", new Vector2((tile.Location.X - viewOffset.X) * 64, (tile.Location.Y - viewOffset.Y) * 64 + 40), Color.Black);
+                
                 foreach(var people in tile.Entities)
                 {
                     spriteBatch.Draw(Assets.Sprites.SampleSprite, new Vector2((tile.Location.X - viewOffset.X) * tileSize, (tile.Location.Y - viewOffset.Y) * tileSize), new Rectangle(0, 0, tileSize, tileSize), Color.White);
