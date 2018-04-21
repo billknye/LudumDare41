@@ -45,11 +45,14 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="ChunkOfSpace.cs" />
+    <Compile Include="Enemy.cs" />
     <Compile Include="Entity.cs" />
     <Compile Include="Obstacle.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="SimplexNoise2D.cs" />
+    <Compile Include="SolidTileDefinition.cs" />
     <Compile Include="Tile.cs" />
+    <Compile Include="TileDefinition.cs" />
     <Compile Include="Universe.cs" />
     <None Include="libopenal.1.dylib">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

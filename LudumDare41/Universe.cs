@@ -12,11 +12,14 @@ namespace LudumDare41
         public Player Player;
         public List<Obstacle> Obstacles;
 
+        Random r;
         SimplexNoise2D noise;
 
         public Universe()
         {
             ChunksOfFreedom = new Dictionary<Point, ChunkOfSpace>();
+
+            r = new Random();
             noise = new SimplexNoise2D(293234, 100);
 
             generateChunk(0, 0);
@@ -143,17 +146,85 @@ namespace LudumDare41
             EntityToTile(Player, dest);
 
             // tick!
+            attackTheThings();
         }
-    }
 
-    public class TileDefinition
-    {
-        public static int LastTileDefinitionId;
-        public static TileDefinition[] Definitions;
+        private void attackTheThings()
+        {
+            var entitiesToMove = new List<Enemy>();
+
+            for (int x = Player.Tile.Location.X - 5; x <= Player.Tile.Location.X + 5; x++)
+            {
+                for (int y = Player.Tile.Location.Y - 5; y <= Player.Tile.Location.Y + 5; y++)
+                {
+                    var tile = this[x, y];
+                    foreach (var entity in tile.Entities)
+                    {
+                        if (entity is Enemy enemy)
+                        {
+                            if (r.Next(0, 100) > 30) // move to attack 70%
+                            {
+                                entitiesToMove.Add(enemy);
+                            }
+                        }
+                    }
+                }
+            }
+
+            foreach (var enemy in entitiesToMove)
+            {
 
         public static TileDefinition OpenSpace;
         public static TileDefinition SolidThing;
+                {
+                    // move towards da player...
+                    var dx = Math.Sign(Player.Tile.Location.X - enemy.Tile.Location.X);
+                    var dy = Math.Sign(Player.Tile.Location.Y - enemy.Tile.Location.Y);
 
+                    if (dx != 0 && dy == 0)
+                    {
+                        var move = r.Next(0, 3);
+                        if (move == 1)
+                        {
+                            var destPt = enemy.Tile.Location + new Point(dx, 0);
+                            var dest = this[destPt.X, destPt.Y];
+                            EntityFromTile(enemy);
+                            EntityToTile(enemy, dest);
+                        }
+                        else if (move == 0)
+                        {
+                            var destPt = enemy.Tile.Location + new Point(0, dy);
+                            var dest = this[destPt.X, destPt.Y];
+                            EntityFromTile(enemy);
+                            EntityToTile(enemy, dest);
+                        }
+                        else
+                        {
+                            var destPt = enemy.Tile.Location + new Point(dx, dy);
+                            var dest = this[destPt.X, destPt.Y];
+                            EntityFromTile(enemy);
+                            EntityToTile(enemy, dest);
+                        }
+                    }
+                    else if (dx != 0)
+                    {
+                        var destPt = enemy.Tile.Location + new Point(dx, 0);
+                        var dest = this[destPt.X, destPt.Y];
+                        EntityFromTile(enemy);
+                        EntityToTile(enemy, dest);
+                    }
+                    else if (dy != 0)
+                    {
+                        var destPt = enemy.Tile.Location + new Point(0, dy);
+                        var dest = this[destPt.X, destPt.Y];
+                        EntityFromTile(enemy);
+                        EntityToTile(enemy, dest);
+                    }
+                    else
+                    {
+                        Console.WriteLine(); // what do
+                    }
+                }
         static TileDefinition()
         {
             Definitions = new TileDefinition[256];
