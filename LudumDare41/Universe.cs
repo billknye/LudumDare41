@@ -470,7 +470,7 @@ namespace LudumDare41
                     var damage =  rand.Next(UniverseConfiguration.ObstacleMinDamage, UniverseConfiguration.ObstacleMaxDamage);
                     if(damage >= Player.HitPoints)
                     {
-                        // END THE GAME!!?!?!?!?!?!!
+                        
                     }
 
                     Player.HitPoints -= damage;
