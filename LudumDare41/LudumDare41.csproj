@@ -45,8 +45,11 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="ChunkOfSpace.cs" />
+    <Compile Include="UniverseConfiguration.cs" />
     <Compile Include="Enemy.cs" />
     <Compile Include="Entity.cs" />
+    <Compile Include="GridFieldOfView.cs" />
+    <Compile Include="Obstacle.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="SimplexNoise2D.cs" />
     <Compile Include="SolidTileDefinition.cs" />

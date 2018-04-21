@@ -6,14 +6,14 @@
         public static TileDefinition[] Definitions;
 
         public static TileDefinition OpenSpace;
-        public static TileDefinition SoidTHing;
+        public static TileDefinition SolidThing;
 
         static TileDefinition()
         {
             Definitions = new TileDefinition[256];
 
             OpenSpace = AddTileDefinition(new TileDefinition());
-            SoidTHing = AddTileDefinition(new SolidTileDefinition());
+            SolidThing = AddTileDefinition(new SolidTileDefinition());
         }
 
         private static TileDefinition AddTileDefinition(TileDefinition tileDefinition)
@@ -28,6 +28,22 @@
             get
             {
                 return false;
+            }
+        }
+
+        public virtual bool Opaque
+        {
+            get
+            {
+                return false;
+            }
+        }
+
+        public virtual int SpriteIndex
+        {
+            get
+            {
+                return 4;
             }
         }
     }
