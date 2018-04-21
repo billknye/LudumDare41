@@ -127,10 +127,50 @@ namespace LudumDare41
         {
             entity.Tile = tile;
             tile.Entities.Add(entity);
+
+            if (entity.LightEmitted > 0)
+            {
+                var ent = entity.Tile.Location;
+                GridFieldOfView.ComputeFieldOfViewWithShadowCasting(
+                    ent.X,
+                    ent.Y,
+                    entity.LightEmitted,
+                    (x, y) => isOpaque(new Point(x, y)),
+                    (x, y) =>
+                    {
+                        var delta = new Point(Math.Abs(x - ent.X), Math.Abs(y - ent.Y));
+                        var dist = (int)Math.Floor(Math.Sqrt((delta.X * delta.X) + (delta.Y * delta.Y)));
+
+                        if (dist > entity.LightEmitted)
+                            return;
+
+                        this[x, y].Light += (entity.LightEmitted - dist);
+                    });
+            }
         }
 
         public void EntityFromTile(Entity entity)
         {
+            if (entity.LightEmitted > 0)
+            {
+                var ent = entity.Tile.Location;
+                GridFieldOfView.ComputeFieldOfViewWithShadowCasting(
+                    ent.X,
+                    ent.Y,
+                    entity.LightEmitted,
+                    (x, y) => isOpaque(new Point(x, y)),
+                    (x, y) =>
+                    {
+                        var delta = new Point(Math.Abs(x - ent.X), Math.Abs(y - ent.Y));
+                        var dist = (int)Math.Floor(Math.Sqrt((delta.X * delta.X) + (delta.Y * delta.Y)));
+
+                        if (dist > entity.LightEmitted)
+                            return;
+
+                        this[x, y].Light -= (entity.LightEmitted - dist);
+                    });
+            }
+
             entity.Tile.Entities.Remove(entity);
             entity.Tile = null;
         }
@@ -273,8 +313,6 @@ namespace LudumDare41
             {
                 Player.Velocity = new Point(Player.Velocity.X, 3);
             }
-
-            Console.WriteLine(Player.Velocity);
 
             var point = Player.Tile.Location + moveDir;
 

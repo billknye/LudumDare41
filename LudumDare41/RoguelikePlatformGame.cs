@@ -176,16 +176,20 @@ namespace LudumDare41
                 if (spriteIndex == 4)
                     spriteIndex += Math.Abs((tile.Location.X * 23 + tile.Location.Y * 5) % 12);
 
-                spriteBatch.Draw(Assets.Sprites.SampleSprite, new Vector2((tile.Location.X - viewOffset.X) * 64, (tile.Location.Y - viewOffset.Y) * 64), new Rectangle((spriteIndex % 4) * 64, (spriteIndex / 4) * 64, 64, 64), Color.White);
+                var light = tile.Light;
+
+                spriteBatch.Draw(Assets.Sprites.SampleSprite, new Vector2((tile.Location.X - viewOffset.X) * 64, (tile.Location.Y - viewOffset.Y) * 64), new Rectangle((spriteIndex % 4) * 64, (spriteIndex / 4) * 64, 64, 64), getLightColor(light));
                 
                 if (availableMoves.Contains(tile))
                 {
                     var loc = new Vector2((tile.Location.X - viewOffset.X) * 64, (tile.Location.Y - viewOffset.Y) * 64);
                     moveThings.Add(Tuple.Create(new Rectangle((int)loc.X, (int)loc.Y, 64, 64), tile.Location));
-                    spriteBatch.Draw(Assets.Sprites.SampleSprite, loc, new Rectangle(64, 0, 64, 64), Color.Lime);
+                    spriteBatch.Draw(Assets.Sprites.SampleSprite, loc, new Rectangle(192, 0, 64, 64),
+                        Color.FromNonPremultiplied(0, 255, 0, 255 - (int)(Vector2.Distance(new Vector2(GraphicsDevice.Viewport.Width / 2, GraphicsDevice.Viewport.Height / 2), new Vector2(lastMouse.Position.X, lastMouse.Position.Y))))
+                        );
                 }
 
-                spriteBatch.DrawString(Assets.Fonts.Japonesa16pt, $"{tile.Location.X},{tile.Location.Y}", new Vector2((tile.Location.X - viewOffset.X) * 64 + 2, (tile.Location.Y - viewOffset.Y) * 64 + 40), Color.Black);                
+                spriteBatch.DrawString(Assets.Fonts.Japonesa16pt, $"{tile.Location.X},{tile.Location.Y}", new Vector2((tile.Location.X - viewOffset.X) * 64 + 2, (tile.Location.Y - viewOffset.Y) * 64 + 40), Color.Black);
                 foreach(var entity in tile.Entities)
                 {
                     var entSprite = entity.SpriteIndex;
@@ -199,6 +203,14 @@ namespace LudumDare41
             spriteBatch.End();
 
             base.Draw(gameTime);
+        }
+
+        private Color getLightColor(int light)
+        {
+            var num = Math.Min(255, light * 32);
+            num = Math.Max(32, num);
+
+            return new Color(num, num, num);
         }
     }
 }

@@ -11,5 +11,7 @@ namespace LudumDare41
         public Point Velocity { get; set; }
 
         public override int SpriteIndex => 0;
+
+        public override int LightEmitted => 4;
     }
 }
