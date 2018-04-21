@@ -40,12 +40,12 @@ namespace LudumDare41
                 Obstacle obstacle = new Obstacle() { Destructible = true };
                 EntityToTile(obstacle, this[numberOfObstacles.Next(10), numberOfObstacles.Next(10)]);
                 obstacles.Add(obstacle);
-            }           
+            }
         }
 
         public void GetTilesInRange(Rectangle viewRectangle, Action<Tile> doThing)
         {
-            for (int x =viewRectangle.X; x < viewRectangle.Right; x++)
+            for (int x = viewRectangle.X; x < viewRectangle.Right; x++)
             {
                 for (int y = viewRectangle.Y; y < viewRectangle.Bottom; y++)
                 {
@@ -140,7 +140,7 @@ namespace LudumDare41
                 if (corner2def.Solid)
                     return;
             }
-            
+
 
             EntityFromTile(Player);
             EntityToTile(Player, dest);
@@ -174,8 +174,6 @@ namespace LudumDare41
             foreach (var enemy in entitiesToMove)
             {
 
-        public static TileDefinition OpenSpace;
-        public static TileDefinition SolidThing;
                 {
                     // move towards da player...
                     var dx = Math.Sign(Player.Tile.Location.X - enemy.Tile.Location.X);
@@ -225,32 +223,45 @@ namespace LudumDare41
                         Console.WriteLine(); // what do
                     }
                 }
-        static TileDefinition()
-        {
-            Definitions = new TileDefinition[256];
 
-            OpenSpace = AddTileDefinition(new TileDefinition());
-            SolidThing = AddTileDefinition(new SolidTileDefinition());
-        }
-
-        private static TileDefinition AddTileDefinition(TileDefinition tileDefinition)
-        {
-            Definitions[LastTileDefinitionId] = tileDefinition;
-            LastTileDefinitionId++;
-            return tileDefinition;
-        }
-
-        public virtual bool Solid
-        {
-            get
-            {
-                return false;
             }
         }
-    }
 
-    public class SolidTileDefinition : TileDefinition
-    {
-        public override bool Solid => true;
+        public class TileDefinition
+        {
+            public static int LastTileDefinitionId;
+            public static TileDefinition[] Definitions;
+
+            public static TileDefinition OpenSpace;
+            public static TileDefinition SolidThing;
+
+            static TileDefinition()
+            {
+                Definitions = new TileDefinition[256];
+
+                OpenSpace = AddTileDefinition(new TileDefinition());
+                SolidThing = AddTileDefinition(new SolidTileDefinition());
+            }
+
+            private static TileDefinition AddTileDefinition(TileDefinition tileDefinition)
+            {
+                Definitions[LastTileDefinitionId] = tileDefinition;
+                LastTileDefinitionId++;
+                return tileDefinition;
+            }
+
+            public virtual bool Solid
+            {
+                get
+                {
+                    return false;
+                }
+            }
+        }
+
+        public class SolidTileDefinition : TileDefinition
+        {
+            public override bool Solid => true;
+        }
     }
 }
