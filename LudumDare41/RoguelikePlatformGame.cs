@@ -49,6 +49,8 @@ namespace LudumDare41
             container.Register<GameStateManager>(Reuse.Singleton);
             container.Register<Universe>(Reuse.Singleton);
 
+            container.Register<Entities.Behavior.EnemyAttackBehavior>(Reuse.Singleton);
+
             gameStateManager = container.Resolve<GameStateManager>();
             var intro = container.New<IntroState>();
             gameStateManager.Enter(intro);

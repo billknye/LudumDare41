@@ -1,4 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+﻿using DryIoc;
+using LudumDare41.Entities.Behavior;
+using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 
 namespace LudumDare41
@@ -6,9 +8,7 @@ namespace LudumDare41
     public class Tile
     {
         public Point Location;
-
         public byte SomeTileShit;
-
         public int Light;
 
         public List<Entity> Entities;
@@ -26,14 +26,16 @@ namespace LudumDare41
             Entities = new List<Entity>();
         }
 
-        public void Tick()
+        public void Tick(Container container)
         {
             foreach (var ent in Entities)
             {
-                ent.Tick();
+                if (ent.Behavior != null)
+                {
+                    var behavior = container.New(ent.Behavior) as EntityBehavior;
+                    behavior.Tick(ent);
+                }
             }
         }
-
-
     }
 }

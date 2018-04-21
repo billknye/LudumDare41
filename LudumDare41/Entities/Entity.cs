@@ -1,4 +1,6 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+﻿using LudumDare41.Entities.Behavior;
+using Microsoft.Xna.Framework.Graphics;
+using System;
 
 namespace LudumDare41
 {
@@ -12,9 +14,6 @@ namespace LudumDare41
 
         public virtual SpriteEffects SpriteEffects => SpriteEffects.None;
 
-        public virtual void Tick()
-        {
-
-        }
+        public virtual Type Behavior => null;
     }
 }
