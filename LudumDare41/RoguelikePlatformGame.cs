@@ -89,19 +89,19 @@ namespace LudumDare41
             {
                 dest = new Point(-1, 1);
             }
-            if (wasKeyJustPressed(Keys.NumPad2, keyboard, lastKeyboard))
+            if (wasKeyJustPressed(Keys.NumPad2, keyboard, lastKeyboard) || (wasKeyJustPressed(Keys.Down, keyboard, lastKeyboard)))
             {
                 dest = new Point(0, 1);
             }
-            if (wasKeyJustPressed(Keys.NumPad3, keyboard, lastKeyboard))
+            if (wasKeyJustPressed(Keys.NumPad3, keyboard, lastKeyboard) )
             {
                 dest = new Point(1, 1);
             }
-            if (wasKeyJustPressed(Keys.NumPad4, keyboard, lastKeyboard))
+            if (wasKeyJustPressed(Keys.NumPad4, keyboard, lastKeyboard) || (wasKeyJustPressed(Keys.Left, keyboard, lastKeyboard)))
             {
                 dest = new Point(-1, 0);
             }
-            if (wasKeyJustPressed(Keys.NumPad6, keyboard, lastKeyboard))
+            if (wasKeyJustPressed(Keys.NumPad6, keyboard, lastKeyboard) || (wasKeyJustPressed(Keys.Right, keyboard, lastKeyboard)))
             {
                 dest = new Point(1, 0);
             }
@@ -109,7 +109,7 @@ namespace LudumDare41
             {
                 dest = new Point(-1, -1);
             }
-            if (wasKeyJustPressed(Keys.NumPad8, keyboard, lastKeyboard))
+            if (wasKeyJustPressed(Keys.NumPad8, keyboard, lastKeyboard) || (wasKeyJustPressed(Keys.Up, keyboard, lastKeyboard)))
             {
                 dest = new Point(0, -1);
             }
@@ -129,7 +129,6 @@ namespace LudumDare41
             // make player be center
             viewOffset = new Point(-width / 2 + universe.Player.Tile.Location.X, -height / 2 + universe.Player.Tile.Location.Y);
 
-            //Console.WriteLine(viewOffset);
 
             lastKeyboard = keyboard;
             base.Update(gameTime);
@@ -170,17 +169,17 @@ namespace LudumDare41
                 (int)Math.Ceiling(Window.ClientBounds.Height / 64.0)
                 );
 
-            Console.WriteLine(viewRectangle);
 
             universe.GetTilesInRange(viewRectangle, tile =>
             {
                 spriteBatch.Draw(Assets.Sprites.SampleSprite, new Vector2((tile.Location.X - viewOffset.X) * 64, (tile.Location.Y - viewOffset.Y) * 64), new Rectangle(64, 0, 64, 64), testColors[ tile.SomeTileShit % testColors.Length]);
                 spriteBatch.DrawString(Assets.Fonts.Japonesa16pt, $"{tile.Location.X},{tile.Location.Y}", new Vector2((tile.Location.X - viewOffset.X) * 64, (tile.Location.Y - viewOffset.Y) * 64 + 40), Color.Black);
-            });
 
-
-            spriteBatch.Draw(Assets.Sprites.SampleSprite, new Vector2((universe.Player.Tile.Location.X - viewOffset.X) * 64, (universe.Player.Tile.Location.Y - viewOffset.Y) * 64), new Rectangle(0, 0, 64, 64), Color.White);
-
+                foreach(var people in tile.Entities)
+                {
+                    spriteBatch.Draw(Assets.Sprites.SampleSprite, new Vector2((tile.Location.X - viewOffset.X) * 64, (tile.Location.Y - viewOffset.Y) * 64), new Rectangle(0, 0, 64, 64), Color.White);
+                }
+            });            
 
             spriteBatch.End();
 

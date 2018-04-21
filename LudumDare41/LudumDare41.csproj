@@ -23,7 +23,6 @@
     <ErrorReport>prompt</ErrorReport>
     <Prefer32Bit>false</Prefer32Bit>
     <WarningLevel>4</WarningLevel>
-    <IntermediateOutputPath>C:\Users\ian\AppData\Local\Temp\vs4EDC.tmp\Debug\</IntermediateOutputPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
     <OutputPath>bin\$(MonoGamePlatform)\$(Platform)\$(Configuration)\</OutputPath>
@@ -34,7 +33,6 @@
     <ErrorReport>prompt</ErrorReport>
     <Prefer32Bit>false</Prefer32Bit>
     <WarningLevel>4</WarningLevel>
-    <IntermediateOutputPath>C:\Users\ian\AppData\Local\Temp\vs4EDC.tmp\Release\</IntermediateOutputPath>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>Icon.ico</ApplicationIcon>
@@ -47,9 +45,13 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="ChunkOfSpace.cs" />
+    <Compile Include="Enemy.cs" />
     <Compile Include="Entity.cs" />
+    <Compile Include="Player.cs" />
     <Compile Include="SimplexNoise2D.cs" />
+    <Compile Include="SolidTileDefinition.cs" />
     <Compile Include="Tile.cs" />
+    <Compile Include="TileDefinition.cs" />
     <Compile Include="Universe.cs" />
     <None Include="libopenal.1.dylib">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
