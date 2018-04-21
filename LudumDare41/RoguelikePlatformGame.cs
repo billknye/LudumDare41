@@ -186,21 +186,15 @@ namespace LudumDare41
                 }
 
                 spriteBatch.DrawString(Assets.Fonts.Japonesa16pt, $"{tile.Location.X},{tile.Location.Y}", new Vector2((tile.Location.X - viewOffset.X) * 64 + 2, (tile.Location.Y - viewOffset.Y) * 64 + 40), Color.Black);                
-                foreach(var people in tile.Entities)
+                foreach(var entity in tile.Entities)
                 {
-                    spriteBatch.Draw(Assets.Sprites.SampleSprite, new Vector2((tile.Location.X - viewOffset.X) * tileSize, (tile.Location.Y - viewOffset.Y) * tileSize), new Rectangle(0, 0, tileSize, tileSize), Color.White);
+                    var entSprite = entity.SpriteIndex;
+
+                    spriteBatch.Draw(Assets.Sprites.SampleSprite, new Vector2((tile.Location.X - viewOffset.X) * tileSize, (tile.Location.Y - viewOffset.Y) * tileSize), new Rectangle((entSprite % 4) * 64, (entSprite / 4) * 64, tileSize, tileSize), Color.White);
                 }
 
                
             });
-
-            for (int i = 0; i < universe.Obstacles.Count; i++)
-            {
-                universe.GetTilesInRange(universe.Obstacles[i].Tile.Location.X, universe.Obstacles[i].Tile.Location.Y, 5, tile =>
-                {
-                    spriteBatch.Draw(Assets.Sprites.SampleSprite, new Vector2((universe.Obstacles[i].Tile.Location.X - viewOffset.X) * tileSize, (universe.Obstacles[i].Tile.Location.Y - viewOffset.Y) * tileSize), new Rectangle(tileSize * 2, 0, tileSize, tileSize), Color.White);
-                });
-            }
           
             spriteBatch.End();
 

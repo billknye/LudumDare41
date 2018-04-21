@@ -9,5 +9,7 @@ namespace LudumDare41
     public class Obstacle : Entity
     {
         public bool Destructible { get; set; }
+
+        public override int SpriteIndex => 2;
     }
 }

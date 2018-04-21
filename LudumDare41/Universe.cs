@@ -11,7 +11,6 @@ namespace LudumDare41
         public Dictionary<Point, ChunkOfSpace> ChunksOfFreedom;
 
         public Player Player;
-        public List<Obstacle> Obstacles;
 
         GridFieldOfView gridFieldOfView;
         Random r;
@@ -32,12 +31,11 @@ namespace LudumDare41
             }
 
             Player = new Player();
-            Obstacles = new List<Obstacle>();
-            AddObstacles(Obstacles);
+            AddObstacles();
             EntityToTile(Player, this[0, 0]);
         }
 
-        private void AddObstacles(List<Obstacle> obstacles)
+        private void AddObstacles()
         {
             //TODO: IMPROVE THIS SHIT
             int seed = DateTime.Now.Millisecond;
@@ -47,7 +45,6 @@ namespace LudumDare41
             {
                 Obstacle obstacle = new Obstacle() { Destructible = true };
                 EntityToTile(obstacle, this[numberOfObstacles.Next(1, UniverseConfiguration.MaxNumberOfObstacles), numberOfObstacles.Next(1, UniverseConfiguration.MaxNumberOfObstacles)]);
-                obstacles.Add(obstacle);
             }
         }
 

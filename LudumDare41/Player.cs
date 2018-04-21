@@ -6,5 +6,7 @@ namespace LudumDare41
     {
         int HitPoints { get; set; }
         public Point Velocity { get; set; }
+
+        public override int SpriteIndex => 0;
     }
 }
