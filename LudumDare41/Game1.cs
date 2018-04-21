@@ -87,40 +87,43 @@ namespace LudumDare41
 
             // make move go
             var dest = Point.Zero;
-            if (keyboard.IsKeyDown(Keys.NumPad1))
+            if (wasKeyJustPressed(Keys.NumPad1, keyboard, lastKeyboard))
             {
                 dest = new Point(-1, 1);
             }
-            if (keyboard.IsKeyDown(Keys.NumPad2))
+            if (wasKeyJustPressed(Keys.NumPad2, keyboard, lastKeyboard))
             {
                 dest = new Point(0, 1);
             }
-            if (keyboard.IsKeyDown(Keys.NumPad3))
+            if (wasKeyJustPressed(Keys.NumPad3, keyboard, lastKeyboard))
             {
                 dest = new Point(1, 1);
             }
-            if (keyboard.IsKeyDown(Keys.NumPad4))
+            if (wasKeyJustPressed(Keys.NumPad4, keyboard, lastKeyboard))
             {
                 dest = new Point(-1, 0);
             }
-            if (keyboard.IsKeyDown(Keys.NumPad6))
+            if (wasKeyJustPressed(Keys.NumPad6, keyboard, lastKeyboard))
             {
                 dest = new Point(1, 0);
             }
-            if (keyboard.IsKeyDown(Keys.NumPad7))
+            if (wasKeyJustPressed(Keys.NumPad7, keyboard, lastKeyboard))
             {
                 dest = new Point(-1, -1);
             }
-            if (keyboard.IsKeyDown(Keys.NumPad8))
+            if (wasKeyJustPressed(Keys.NumPad8, keyboard, lastKeyboard))
             {
                 dest = new Point(0, -1);
             }
-            if (keyboard.IsKeyDown(Keys.NumPad9))
+            if (wasKeyJustPressed(Keys.NumPad9, keyboard, lastKeyboard))
             {
                 dest = new Point(1, -1);
             }
 
-            universe.Player += dest;
+            if (dest != Point.Zero)
+            {
+                universe.DoMove(universe.Player + dest);                
+            }
 
             var width = (int)Math.Ceiling(Window.ClientBounds.Width / 64.0);
             var height = (int)Math.Ceiling(Window.ClientBounds.Height / 64.0);
@@ -132,6 +135,11 @@ namespace LudumDare41
 
             lastKeyboard = keyboard;
             base.Update(gameTime);
+        }
+
+        private bool wasKeyJustPressed(Keys key, KeyboardState keyboard, KeyboardState lastKeyboard)
+        {
+            return keyboard.IsKeyDown(key) && lastKeyboard.IsKeyUp(key);
         }
 
         /// <summary>
@@ -267,6 +275,13 @@ namespace LudumDare41
         {
             entity.Tile.Entities.Remove(entity);
             entity.Tile = null;
+        }
+
+        internal void DoMove(Point point)
+        {
+            Player = point;
+
+            // tick!
         }
     }
 
