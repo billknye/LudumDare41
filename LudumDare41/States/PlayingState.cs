@@ -20,17 +20,16 @@ namespace LudumDare41.States
         private readonly GameStateManager gameStateManager;
         private readonly SpriteBatch spriteBatch;
 
-        public PlayingState(GameStateManager gameStateManager, SpriteBatch spriteBatch)
+        public PlayingState(GameStateManager gameStateManager, SpriteBatch spriteBatch, Universe universe)
         {
             this.gameStateManager = gameStateManager;
             this.spriteBatch = spriteBatch;
+            this.universe = universe;
         }
 
         public override void Entered()
         {
-            universe = new Universe();
             moveThings = new List<Tuple<Rectangle, Point>>();
-
         }
 
         public override void Updated(GameTime gameTime)

@@ -45,7 +45,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="ChunkOfSpace.cs" />
-    <Compile Include="Item.cs" />
+    <Compile Include="Entities\Behavior\EntityBehavior.cs" />
+    <Compile Include="Entities\Item.cs" />
     <Compile Include="OxygenTank.cs" />
     <Compile Include="States\GameState.cs" />
     <Compile Include="States\GameStateManager.cs" />
@@ -53,11 +54,11 @@
     <Compile Include="States\IntroState.cs" />
     <Compile Include="States\PlayingState.cs" />
     <Compile Include="UniverseConfiguration.cs" />
-    <Compile Include="Enemy.cs" />
-    <Compile Include="Entity.cs" />
+    <Compile Include="Entities\Enemy.cs" />
+    <Compile Include="Entities\Entity.cs" />
     <Compile Include="GridFieldOfView.cs" />
-    <Compile Include="Obstacle.cs" />
-    <Compile Include="Player.cs" />
+    <Compile Include="Entities\Obstacle.cs" />
+    <Compile Include="Entities\Player.cs" />
     <Compile Include="SimplexNoise2D.cs" />
     <Compile Include="SolidTileDefinition.cs" />
     <Compile Include="Tile.cs" />

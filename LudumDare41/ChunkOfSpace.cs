@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DryIoc;
+using System;
 
 namespace LudumDare41
 {
@@ -28,11 +29,11 @@ namespace LudumDare41
         {
         }
 
-        public void Tick()
+        public void Tick(Container container)
         {
             foreach (var tile in Tiles)
             {
-                tile.Tick();
+                tile.Tick(container);
             }
         }
     }

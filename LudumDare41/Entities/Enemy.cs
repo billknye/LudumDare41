@@ -1,4 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+﻿using LudumDare41.Entities.Behavior;
+using Microsoft.Xna.Framework;
+using System;
 
 namespace LudumDare41
 {
@@ -11,5 +13,12 @@ namespace LudumDare41
         public Point Velocity { get; set; }
 
         public override int SpriteIndex => 6;
+
+        public override Type Behavior => typeof(EnemyAttackBehavior);
+
+        public Enemy()
+        {
+        }
+
     }
 }
