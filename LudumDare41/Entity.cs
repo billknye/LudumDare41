@@ -12,14 +12,4 @@ namespace LudumDare41
 
         public virtual SpriteEffects SpriteEffects => SpriteEffects.None;
     }
-
-    public class Item : Entity
-    {
-        public override int SpriteIndex => 4;
-    }
-
-    public class OxygenTank : Item
-    {
-
-    }
 }
