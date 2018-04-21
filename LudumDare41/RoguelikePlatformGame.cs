@@ -192,18 +192,18 @@ namespace LudumDare41
 
             universe.GetTilesInRange(universe.Player.Tile.Location.X, universe.Player.Tile.Location.Y, 5, tile =>
             {
-                spriteBatch.Draw(Assets.Sprites.SampleSprite, new Vector2((tile.Location.X - viewOffset.X) * 64, (tile.Location.Y - viewOffset.Y) * 64), new Rectangle(64, 0, 64, 64), testColors[ tile.SomeTileShit % testColors.Length]);
+                spriteBatch.Draw(Assets.Sprites.SampleSprite, new Vector2((tile.Location.X - viewOffset.X) * tileSize, (tile.Location.Y - viewOffset.Y) * tileSize), new Rectangle(tileSize, 0, tileSize, tileSize), testColors[ tile.SomeTileShit % testColors.Length]);
                 
                 if (availableMoves.Contains(tile))
                 {
-                    var loc = new Vector2((tile.Location.X - viewOffset.X) * 64, (tile.Location.Y - viewOffset.Y) * 64);
+                    var loc = new Vector2((tile.Location.X - viewOffset.X) * tileSize, (tile.Location.Y - viewOffset.Y) * tileSize);
 
-                    moveThings.Add(Tuple.Create(new Rectangle((int)loc.X, (int)loc.Y, 64, 64), tile.Location));
+                    moveThings.Add(Tuple.Create(new Rectangle((int)loc.X, (int)loc.Y, tileSize, tileSize), tile.Location));
 
-                    spriteBatch.Draw(Assets.Sprites.SampleSprite, loc, new Rectangle(64, 0, 64, 64), Color.Lime);
+                    spriteBatch.Draw(Assets.Sprites.SampleSprite, loc, new Rectangle(tileSize, 0, tileSize, tileSize), Color.Lime);
                 }
 
-                spriteBatch.DrawString(Assets.Fonts.Japonesa16pt, $"{tile.Location.X},{tile.Location.Y}", new Vector2((tile.Location.X - viewOffset.X) * 64, (tile.Location.Y - viewOffset.Y) * 64 + 40), Color.Black);
+                spriteBatch.DrawString(Assets.Fonts.Japonesa16pt, $"{tile.Location.X},{tile.Location.Y}", new Vector2((tile.Location.X - viewOffset.X) * tileSize, (tile.Location.Y - viewOffset.Y) * tileSize + 40), Color.Black);
                 
                 foreach(var people in tile.Entities)
                 {
@@ -215,11 +215,12 @@ namespace LudumDare41
 
             for (int i = 0; i < universe.Obstacles.Count; i++)
             {
-                spriteBatch.Draw(Assets.Sprites.SampleSprite, new Vector2((universe.Obstacles[i].Tile.Location.X - viewOffset.X) * tileSize, (universe.Obstacles[i].Tile.Location.Y - viewOffset.Y) * tileSize), new Rectangle(tileSize * 2, 0, tileSize, tileSize), Color.White);
+                universe.GetTilesInRange(universe.Obstacles[i].Tile.Location.X, universe.Obstacles[i].Tile.Location.Y, 5, tile =>
+                {
+                    spriteBatch.Draw(Assets.Sprites.SampleSprite, new Vector2((universe.Obstacles[i].Tile.Location.X - viewOffset.X) * tileSize, (universe.Obstacles[i].Tile.Location.Y - viewOffset.Y) * tileSize), new Rectangle(tileSize * 2, 0, tileSize, tileSize), Color.White);
+                });
             }
-            //spriteBatch.Draw(Assets.Sprites.SampleSprite, new Vector2((universe.Player.Tile.Location.X - viewOffset.X) * tileSize, (universe.Player.Tile.Location.Y - viewOffset.Y) * tileSize), new Rectangle(0, 0, tileSize, tileSize), Color.White);
-
-
+          
             spriteBatch.End();
 
             base.Draw(gameTime);

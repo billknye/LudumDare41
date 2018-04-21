@@ -26,8 +26,6 @@ namespace LudumDare41
 
             var chunk = generateChunk(0, 0);
 
-            
-
             for (int x = 0; x < 10; x++)
             {
                 chunk[x, 1].SomeTileShit = 1;
