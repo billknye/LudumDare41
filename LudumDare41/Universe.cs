@@ -215,7 +215,7 @@ namespace LudumDare41
             if (moveDir.X != 0 && moveDir.Y != 0)
             {
                 if (isSolid(new Point(Player.Tile.Location.X + moveDir.X, Player.Tile.Location.Y)))
-                { 
+                {
                     return false;
                 }
 
@@ -231,7 +231,7 @@ namespace LudumDare41
                 if (player.Velocity.Y >= 0 && !isOnLand(player))
                 {
                     return false;
-                }                                
+                }
             }
 
             if (moveDir.X != 0)
@@ -431,6 +431,21 @@ namespace LudumDare41
                     else
                     {
                         Console.WriteLine(); // what do
+                    }
+                }
+            }
+
+
+
+            var tile1 = this[Player.Tile.Location.X, Player.Tile.Location.Y];
+            foreach (var entity in tile1.Entities)
+            {
+                if(entity is Obstacle obstacle)
+                {
+                    var damage =  r.Next(UniverseConfiguration.ObstacleMinDamage, UniverseConfiguration.ObstacleMaxDamage);
+                    if(damage >= Player.HitPoints)
+                    {
+                        // END THE GAME!!?!?!?!?!?!!
                     }
                 }
             }

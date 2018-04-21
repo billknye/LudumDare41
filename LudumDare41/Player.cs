@@ -12,6 +12,7 @@ namespace LudumDare41
 
         public float Oxygen { get; set; }
         public float MaxOxygen { get; set; }
+        public int MaxHitPoints { get; set; }
 
         public bool LastMoveLeft { get; set; }
 
@@ -24,6 +25,7 @@ namespace LudumDare41
         public Player()
         {
             Oxygen = MaxOxygen = 100;
+            HitPoints = MaxHitPoints = 100;
         }
     }
 }
