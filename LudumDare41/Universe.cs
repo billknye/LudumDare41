@@ -11,17 +11,23 @@ namespace LudumDare41
 
         public Entity Player;
 
+        Random r;
         SimplexNoise2D noise;
 
         public Universe()
         {
             ChunksOfFreedom = new Dictionary<Point, ChunkOfSpace>();
+
+            r = new Random();
             noise = new SimplexNoise2D(293234, 100);
 
             generateChunk(0, 0);
-            Player = new Entity();
+            Player = new Player();
 
             EntityToTile(Player, this[0, 0]);
+
+            var enemy = new Enemy();
+            EntityToTile(enemy, this[7, 7]);
         }
 
         public void GetTilesInRange(Rectangle viewRectangle, Action<Tile> doThing)
@@ -127,43 +133,86 @@ namespace LudumDare41
             EntityToTile(Player, dest);
 
             // tick!
-        }
-    }
-
-    public class TileDefinition
-    {
-        public static int LastTileDefinitionId;
-        public static TileDefinition[] Definitions;
-
-        public static TileDefinition OpenSpace;
-        public static TileDefinition SoidTHing;
-
-        static TileDefinition()
-        {
-            Definitions = new TileDefinition[256];
-
-            OpenSpace = AddTileDefinition(new TileDefinition());
-            SoidTHing = AddTileDefinition(new SolidTileDefinition());
+            attackTheThings();
         }
 
-        private static TileDefinition AddTileDefinition(TileDefinition tileDefinition)
+        private void attackTheThings()
         {
-            Definitions[LastTileDefinitionId] = tileDefinition;
-            LastTileDefinitionId++;
-            return tileDefinition;
-        }
+            var entitiesToMove = new List<Enemy>();
 
-        public virtual bool Solid
-        {
-            get
+            for (int x = Player.Tile.Location.X - 5; x <= Player.Tile.Location.X + 5; x++)
             {
-                return false;
+                for (int y = Player.Tile.Location.Y - 5; y <= Player.Tile.Location.Y + 5; y++)
+                {
+                    var tile = this[x, y];
+                    foreach (var entity in tile.Entities)
+                    {
+                        if (entity is Enemy enemy)
+                        {
+                            if (r.Next(0, 100) > 30) // move to attack 70%
+                            {
+                                entitiesToMove.Add(enemy);
+                            }
+                        }
+                    }
+                }
+            }
+
+            foreach (var enemy in entitiesToMove)
+            {
+
+                {
+                    // move towards da player...
+                    var dx = Math.Sign(Player.Tile.Location.X - enemy.Tile.Location.X);
+                    var dy = Math.Sign(Player.Tile.Location.Y - enemy.Tile.Location.Y);
+
+                    if (dx != 0 && dy == 0)
+                    {
+                        var move = r.Next(0, 3);
+                        if (move == 1)
+                        {
+                            var destPt = enemy.Tile.Location + new Point(dx, 0);
+                            var dest = this[destPt.X, destPt.Y];
+                            EntityFromTile(enemy);
+                            EntityToTile(enemy, dest);
+                        }
+                        else if (move == 0)
+                        {
+                            var destPt = enemy.Tile.Location + new Point(0, dy);
+                            var dest = this[destPt.X, destPt.Y];
+                            EntityFromTile(enemy);
+                            EntityToTile(enemy, dest);
+                        }
+                        else
+                        {
+                            var destPt = enemy.Tile.Location + new Point(dx, dy);
+                            var dest = this[destPt.X, destPt.Y];
+                            EntityFromTile(enemy);
+                            EntityToTile(enemy, dest);
+                        }
+                    }
+                    else if (dx != 0)
+                    {
+                        var destPt = enemy.Tile.Location + new Point(dx, 0);
+                        var dest = this[destPt.X, destPt.Y];
+                        EntityFromTile(enemy);
+                        EntityToTile(enemy, dest);
+                    }
+                    else if (dy != 0)
+                    {
+                        var destPt = enemy.Tile.Location + new Point(0, dy);
+                        var dest = this[destPt.X, destPt.Y];
+                        EntityFromTile(enemy);
+                        EntityToTile(enemy, dest);
+                    }
+                    else
+                    {
+                        Console.WriteLine(); // what do
+                    }
+                }
+
+                Console.WriteLine("Grrr1");
             }
         }
-    }
-
-    public class SolidTileDefinition : TileDefinition
-    {
-        public override bool Solid => true;
     }
 }
