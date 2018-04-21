@@ -35,10 +35,10 @@ namespace LudumDare41
             int seed = DateTime.Now.Millisecond;
             Random numberOfObstacles = new Random(seed);
 
-            for (int i = 0; i < numberOfObstacles.Next(3) + 1; i++)
+            for (int i = 0; i <= numberOfObstacles.Next(UniverseConfiguration.MinNumberOfObstacles, UniverseConfiguration.MaxNumberOfObstacles); i++)
             {
                 Obstacle obstacle = new Obstacle() { Destructible = true };
-                EntityToTile(obstacle, this[numberOfObstacles.Next(10), numberOfObstacles.Next(10)]);
+                EntityToTile(obstacle, this[numberOfObstacles.Next(1, UniverseConfiguration.MaxNumberOfObstacles), numberOfObstacles.Next(1, UniverseConfiguration.MaxNumberOfObstacles)]);
                 obstacles.Add(obstacle);
             }
         }
@@ -55,7 +55,6 @@ namespace LudumDare41
                 }
             }
         }
-
 
         public Tile this[int x, int y]
         {
@@ -98,9 +97,7 @@ namespace LudumDare41
 
             ChunksOfFreedom[new Point(chunkX, chunkY)] = chunk;
 
-
             return chunk;
-
         }
 
         public void EntityToTile(Entity entity, Tile tile)
@@ -141,7 +138,6 @@ namespace LudumDare41
                     return;
             }
 
-
             EntityFromTile(Player);
             EntityToTile(Player, dest);
 
@@ -173,7 +169,6 @@ namespace LudumDare41
 
             foreach (var enemy in entitiesToMove)
             {
-
                 {
                     // move towards da player...
                     var dx = Math.Sign(Player.Tile.Location.X - enemy.Tile.Location.X);
@@ -223,7 +218,6 @@ namespace LudumDare41
                         Console.WriteLine(); // what do
                     }
                 }
-
             }
         }
 
