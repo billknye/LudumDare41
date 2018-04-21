@@ -12,6 +12,7 @@ namespace LudumDare41
         public Entity Player;
 
         Random r;
+
         SimplexNoise2D noise;
 
         public Universe()
@@ -19,11 +20,12 @@ namespace LudumDare41
             ChunksOfFreedom = new Dictionary<Point, ChunkOfSpace>();
 
             r = new Random();
+
             noise = new SimplexNoise2D(293234, 100);
 
             generateChunk(0, 0);
-            Player = new Player();
 
+            Player = new Player();
             EntityToTile(Player, this[0, 0]);
 
             var enemy = new Enemy();
@@ -109,31 +111,14 @@ namespace LudumDare41
             var dest = this[point.X, point.Y];
             var destDef = TileDefinition.Definitions[dest.SomeTileShit];
 
-            if (destDef.Solid)
-            {
-                return; // nope
-            }
+            if (canEnemyMoveIntoSolids(dest, moveDir)) {
+                EntityFromTile(Player);
+                EntityToTile(Player, dest);
 
-            // check solid corner moves
-            if (moveDir.X != 0 && moveDir.Y != 0)
-            {
-                var corner1 = this[Player.Tile.Location.X + moveDir.X, Player.Tile.Location.Y];
-                var corner1def = TileDefinition.Definitions[corner1.SomeTileShit];
-                if (corner1def.Solid)
-                    return;
-
-                var corner2 = this[Player.Tile.Location.X, Player.Tile.Location.Y + moveDir.Y];
-                var corner2def = TileDefinition.Definitions[corner2.SomeTileShit];
-                if (corner2def.Solid)
-                    return;
+                // tick!
+                attackTheThings();
             }
             
-
-            EntityFromTile(Player);
-            EntityToTile(Player, dest);
-
-            // tick!
-            attackTheThings();
         }
 
         private void attackTheThings()
@@ -173,37 +158,51 @@ namespace LudumDare41
                         {
                             var destPt = enemy.Tile.Location + new Point(dx, 0);
                             var dest = this[destPt.X, destPt.Y];
-                            EntityFromTile(enemy);
-                            EntityToTile(enemy, dest);
+                            if (canEnemyMoveIntoSolids(dest, destPt)) {
+                                EntityFromTile(enemy);
+                                EntityToTile(enemy, dest);
+                            }
                         }
                         else if (move == 0)
                         {
                             var destPt = enemy.Tile.Location + new Point(0, dy);
                             var dest = this[destPt.X, destPt.Y];
-                            EntityFromTile(enemy);
-                            EntityToTile(enemy, dest);
+                            if (canEnemyMoveIntoSolids(dest, destPt))
+                            {
+                                EntityFromTile(enemy);
+                                EntityToTile(enemy, dest);
+                            }
                         }
                         else
                         {
                             var destPt = enemy.Tile.Location + new Point(dx, dy);
                             var dest = this[destPt.X, destPt.Y];
-                            EntityFromTile(enemy);
-                            EntityToTile(enemy, dest);
+                            if (canEnemyMoveIntoSolids(dest, destPt))
+                            {
+                                EntityFromTile(enemy);
+                                EntityToTile(enemy, dest);
+                            }
                         }
                     }
                     else if (dx != 0)
                     {
                         var destPt = enemy.Tile.Location + new Point(dx, 0);
                         var dest = this[destPt.X, destPt.Y];
-                        EntityFromTile(enemy);
-                        EntityToTile(enemy, dest);
+                        if (canEnemyMoveIntoSolids(dest, destPt))
+                        {
+                            EntityFromTile(enemy);
+                            EntityToTile(enemy, dest);
+                        }
                     }
                     else if (dy != 0)
                     {
                         var destPt = enemy.Tile.Location + new Point(0, dy);
                         var dest = this[destPt.X, destPt.Y];
-                        EntityFromTile(enemy);
-                        EntityToTile(enemy, dest);
+                        if (canEnemyMoveIntoSolids(dest, destPt))
+                        {
+                            EntityFromTile(enemy);
+                            EntityToTile(enemy, dest);
+                        }
                     }
                     else
                     {
@@ -213,6 +212,35 @@ namespace LudumDare41
 
                 Console.WriteLine("Grrr1");
             }
+
+
+          
+        }
+
+
+        private bool canEnemyMoveIntoSolids(Tile dest, Point moveDir)
+        {
+            var destDef = TileDefinition.Definitions[dest.SomeTileShit];
+
+            if (destDef.Solid)
+            {
+                return false; // nope
+            }
+
+            // check solid corner moves
+            if (moveDir.X != 0 && moveDir.Y != 0)
+            {
+                var corner1 = this[Player.Tile.Location.X + moveDir.X, Player.Tile.Location.Y];
+                var corner1def = TileDefinition.Definitions[corner1.SomeTileShit];
+                if (corner1def.Solid)
+                    return false;
+
+                var corner2 = this[Player.Tile.Location.X, Player.Tile.Location.Y + moveDir.Y];
+                var corner2def = TileDefinition.Definitions[corner2.SomeTileShit];
+                if (corner2def.Solid)
+                    return false;
+            }
+            return true;
         }
     }
 }

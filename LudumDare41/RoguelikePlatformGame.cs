@@ -177,7 +177,13 @@ namespace LudumDare41
 
                 foreach(var people in tile.Entities)
                 {
-                    spriteBatch.Draw(Assets.Sprites.SampleSprite, new Vector2((tile.Location.X - viewOffset.X) * 64, (tile.Location.Y - viewOffset.Y) * 64), new Rectangle(0, 0, 64, 64), Color.White);
+                    if (people is Player)
+                    {
+                        spriteBatch.Draw(Assets.Sprites.SampleSprite, new Vector2((tile.Location.X - viewOffset.X) * 64, (tile.Location.Y - viewOffset.Y) * 64), new Rectangle(0, 0, 64, 64), Color.White);
+                    }
+                    else {
+                        spriteBatch.Draw(Assets.Sprites.SampleSprite, new Vector2((tile.Location.X - viewOffset.X) * 64, (tile.Location.Y - viewOffset.Y) * 64), new Rectangle(128, 0, 64, 64), Color.White);
+                    }
                 }
             });            
 
