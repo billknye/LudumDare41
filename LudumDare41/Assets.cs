@@ -1,4 +1,5 @@
 ﻿using LudumDare41.ContentManagement;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Media;
@@ -14,6 +15,7 @@ namespace LudumDare41
     {
         public static class Sprites
         {
+            public static Texture2D PixelTexture;
             public static Texture2D SampleSprite;
         }
 
@@ -38,6 +40,7 @@ namespace LudumDare41
         {
             var contentManager = new CustomContentManager(graphicsDevice, "Content");
 
+            Sprites.PixelTexture = new Texture2D(graphicsDevice, 1, 1); Sprites.PixelTexture.SetData(new Color[] { Color.White });
             Sprites.SampleSprite = contentManager.Get<Texture2D>("samplesprite").Content;
 
             Fonts.Japonesa16pt = contentManager.Get<TrueTypeFontLoader>("japonesa").Content.Create(16);

@@ -193,12 +193,19 @@ namespace LudumDare41
                 foreach(var entity in tile.Entities)
                 {
                     var entSprite = entity.SpriteIndex;
-
                     spriteBatch.Draw(Assets.Sprites.SampleSprite, new Vector2((tile.Location.X - viewOffset.X) * tileSize, (tile.Location.Y - viewOffset.Y) * tileSize), new Rectangle((entSprite % 4) * 64, (entSprite / 4) * 64, tileSize, tileSize), Color.White);
-                }
-
-               
+                }               
             });
+
+            // UI
+
+            // oxygen bar
+            spriteBatch.Draw(Assets.Sprites.PixelTexture, new Rectangle(0, Window.ClientBounds.Height - 12, (int)(Window.ClientBounds.Width * universe.Player.Oxygen / universe.Player.MaxOxygen), 12), Color.DarkCyan);
+
+            if (universe.Player.Oxygen < 30)
+            {
+                spriteBatch.Draw(Assets.Sprites.PixelTexture, new Rectangle(0, 0, Window.ClientBounds.Width, Window.ClientBounds.Height), Color.FromNonPremultiplied(0, 0, 0, (int)(30 - universe.Player.Oxygen) * 8));
+            }
           
             spriteBatch.End();
 

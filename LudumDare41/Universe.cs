@@ -347,6 +347,8 @@ namespace LudumDare41
             }
 
             // tick!
+            Player.Oxygen--;
+
             attackTheThings();
         }
 

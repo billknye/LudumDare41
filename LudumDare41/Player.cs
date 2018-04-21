@@ -7,11 +7,18 @@ namespace LudumDare41
         public int HitPoints { get; set; }
         public int BaseAttack { get; set; }
         public int ModifierAttack { get; set; }
-
         public Point Velocity { get; set; }
+
+        public float Oxygen { get; set; }
+        public float MaxOxygen { get; set; }
 
         public override int SpriteIndex => 0;
 
         public override int LightEmitted => 4;
+
+        public Player()
+        {
+            Oxygen = MaxOxygen = 100;
+        }
     }
 }
