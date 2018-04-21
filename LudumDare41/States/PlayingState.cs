@@ -34,6 +34,11 @@ namespace LudumDare41.States
             MouseState mouse = Mouse.GetState();
             KeyboardState keyboard = Keyboard.GetState();
 
+            if (wasKeyJustPressed(Keys.Space, keyboard, lastKeyboard))
+            {
+                Assets.SoundEffects.Pickup.Play();
+            }
+
             // make move go
             var dest = Point.Zero;
 
