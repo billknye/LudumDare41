@@ -45,6 +45,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="ChunkOfSpace.cs" />
+    <Compile Include="UniverseConfiguration.cs" />
     <Compile Include="Enemy.cs" />
     <Compile Include="Entity.cs" />
     <Compile Include="GridFieldOfView.cs" />
