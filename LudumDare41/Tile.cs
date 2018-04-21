@@ -9,6 +9,8 @@ namespace LudumDare41
 
         public byte SomeTileShit;
 
+        public int Light;
+
         public List<Entity> Entities;
 
         public TileDefinition Definition
