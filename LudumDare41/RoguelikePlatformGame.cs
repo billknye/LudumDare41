@@ -120,7 +120,7 @@ namespace LudumDare41
 
             if (dest != Point.Zero)
             {
-                universe.DoMove(universe.Player.Tile.Location + dest);                
+                universe.DoMove(dest);                
             }
 
             var width = (int)Math.Ceiling(Window.ClientBounds.Width / 64.0);
