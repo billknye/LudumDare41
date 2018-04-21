@@ -45,6 +45,13 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="ChunkOfSpace.cs" />
+    <Compile Include="Item.cs" />
+    <Compile Include="OxygenTank.cs" />
+    <Compile Include="States\GameState.cs" />
+    <Compile Include="States\GameStateManager.cs" />
+    <Compile Include="States\GameOverState.cs" />
+    <Compile Include="States\IntroState.cs" />
+    <Compile Include="States\PlayingState.cs" />
     <Compile Include="UniverseConfiguration.cs" />
     <Compile Include="Enemy.cs" />
     <Compile Include="Entity.cs" />
