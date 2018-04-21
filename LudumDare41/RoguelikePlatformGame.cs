@@ -89,19 +89,19 @@ namespace LudumDare41
             {
                 dest = new Point(-1, 1);
             }
-            if (wasKeyJustPressed(Keys.NumPad2, keyboard, lastKeyboard))
+            if (wasKeyJustPressed(Keys.NumPad2, keyboard, lastKeyboard) || (wasKeyJustPressed(Keys.Down, keyboard, lastKeyboard)))
             {
                 dest = new Point(0, 1);
             }
-            if (wasKeyJustPressed(Keys.NumPad3, keyboard, lastKeyboard))
+            if (wasKeyJustPressed(Keys.NumPad3, keyboard, lastKeyboard) )
             {
                 dest = new Point(1, 1);
             }
-            if (wasKeyJustPressed(Keys.NumPad4, keyboard, lastKeyboard))
+            if (wasKeyJustPressed(Keys.NumPad4, keyboard, lastKeyboard) || (wasKeyJustPressed(Keys.Left, keyboard, lastKeyboard)))
             {
                 dest = new Point(-1, 0);
             }
-            if (wasKeyJustPressed(Keys.NumPad6, keyboard, lastKeyboard))
+            if (wasKeyJustPressed(Keys.NumPad6, keyboard, lastKeyboard) || (wasKeyJustPressed(Keys.Right, keyboard, lastKeyboard)))
             {
                 dest = new Point(1, 0);
             }
@@ -109,7 +109,7 @@ namespace LudumDare41
             {
                 dest = new Point(-1, -1);
             }
-            if (wasKeyJustPressed(Keys.NumPad8, keyboard, lastKeyboard))
+            if (wasKeyJustPressed(Keys.NumPad8, keyboard, lastKeyboard) || (wasKeyJustPressed(Keys.Up, keyboard, lastKeyboard)))
             {
                 dest = new Point(0, -1);
             }
