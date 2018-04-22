@@ -21,16 +21,18 @@ namespace LudumDare41.States
 
         Vector2 viewOffset;
         Universe universe;
+        private readonly GameWindow window;
         private readonly GameStateManager gameStateManager;
         private readonly SpriteBatch spriteBatch;
 
         private List<Particle> particles;
 
-        public PlayingState(GameStateManager gameStateManager, SpriteBatch spriteBatch, Universe universe)
+        public PlayingState(GameStateManager gameStateManager, SpriteBatch spriteBatch, Universe universe, GameWindow window)
         {
             this.gameStateManager = gameStateManager;
             this.spriteBatch = spriteBatch;
             this.universe = universe;
+            this.window = window;
             this.particles = new List<Particle>();
         }
 
@@ -188,7 +190,7 @@ namespace LudumDare41.States
 
         public override void Draw(GameTime gameTime)
         {
-            spriteBatch.Begin();
+            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp);
 
             spriteBatch.Draw(Assets.Sprites.Background, new Vector2(0, 0), Color.White);
             spriteBatch.Draw(Assets.Sprites.PlanetSprites, new Vector2(200, 200), Color.White);
@@ -199,7 +201,14 @@ namespace LudumDare41.States
 
             var tiles = new List<Tile>();
 
-            universe.GetTilesInRange(universe.Player.Tile.Location.X, universe.Player.Tile.Location.Y, 5, tile =>
+            var viewRectangle = new Rectangle(
+                (int)Math.Floor(viewOffset.X) - 1,
+                (int)Math.Floor(viewOffset.Y) - 1,
+                (int)Math.Ceiling(gameStateManager.GameWidth / (double)tileSize) + 2,
+                (int)Math.Ceiling(gameStateManager.GameHeight / (double)tileSize) + 2
+                );
+
+            universe.GetTilesInRange(viewRectangle, tile =>
             {
                 tiles.Add(tile);
             });

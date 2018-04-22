@@ -8,5 +8,22 @@
 
         public override int SpriteIndex => 1;
     }
+
+    public class AsteroidTileDefinition : SolidTileDefinition
+    {
+
+        public override int SpriteIndex => 7;
+    }
     
+    public class DeckingTileDefinition : SolidTileDefinition
+    {
+
+        public override int SpriteIndex => 1;
+    }
+
+    public class WallTileDefinition : TileDefinition
+    {
+
+        public override int SpriteIndex => 11;
+    }
 }

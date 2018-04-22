@@ -6,22 +6,29 @@
         public static TileDefinition[] Definitions;
 
         public static TileDefinition OpenSpace;
-        public static TileDefinition SolidThing;
+        public static TileDefinition Asteroid;
+        public static TileDefinition Decking;
+        public static TileDefinition Wall;
 
         static TileDefinition()
         {
             Definitions = new TileDefinition[256];
 
             OpenSpace = AddTileDefinition(new TileDefinition());
-            SolidThing = AddTileDefinition(new SolidTileDefinition());
+            Asteroid = AddTileDefinition(new AsteroidTileDefinition());
+            Decking = AddTileDefinition(new DeckingTileDefinition());
+            Wall = AddTileDefinition(new WallTileDefinition());
         }
 
         private static TileDefinition AddTileDefinition(TileDefinition tileDefinition)
         {
             Definitions[LastTileDefinitionId] = tileDefinition;
+            tileDefinition.TileDefinitionId = LastTileDefinitionId;
             LastTileDefinitionId++;
             return tileDefinition;
         }
+
+        public int TileDefinitionId { get; set; }
 
         public virtual bool Solid
         {

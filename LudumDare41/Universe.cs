@@ -15,8 +15,8 @@ namespace LudumDare41
         public Player Player;
 
         public Random Random;
-        GridFieldOfView gridFieldOfView;
         SimplexNoise2D noise;
+        SimplexNoise2D deckingNoise;
         private readonly Container container;
 
         private List<Action> thingsToDoAfterTick;
@@ -30,14 +30,10 @@ namespace LudumDare41
 
             ChunksOfFreedom = new Dictionary<Point, ChunkOfSpace>();
 
-            noise = new SimplexNoise2D(2235, 40);
+            noise = new SimplexNoise2D(2, 5);
+            deckingNoise = new SimplexNoise2D(456565, 30);
 
             var chunk = generateChunk(0, 0);
-
-            for (int x = 0; x < 10; x++)
-            {
-                chunk[x, 1].SomeTileShit = 1;
-            }
 
             //REMOVE THIS. Set single enemy close to player
             var singleEnemy = container.New<Enemy>();
@@ -80,19 +76,9 @@ namespace LudumDare41
             }
         }
 
-        public void GetTilesInRange(int centerX, int centerY, int radius, Action<Tile> doThing)
+        public void GetTilesInRange(Rectangle viewRectangle, Action<Tile> doThing)
         {
-            GridFieldOfView.ComputeFieldOfViewWithShadowCasting(centerX, centerY, radius, (x, y) =>
-            {
-                return isOpaque(new Point(x, y));
-            }, (x, y) =>
-            {
-                var tile = this[x, y];
-                doThing(tile);
-            });
-
-
-            /*for (int x = viewRectangle.X; x < viewRectangle.Right; x++)
+            for (int x = viewRectangle.X; x < viewRectangle.Right; x++)
             {
                 for (int y = viewRectangle.Y; y < viewRectangle.Bottom; y++)
                 {
@@ -100,7 +86,7 @@ namespace LudumDare41
 
                     doThing(tile);
                 }
-            }*/
+            }
         }
 
         public Tile this[int x, int y]
@@ -142,10 +128,35 @@ namespace LudumDare41
                 for (int y = 0; y < 16; y++)
                 {
                     var pos = new Point(chunkX + x, chunkY + y);
+
+                    var index = TileDefinition.OpenSpace.TileDefinitionId;
+                    var val = deckingNoise.GetValue(pos.X, pos.Y);
+
+                    if (val > 0.5f)
+                    {
+                        var val2 = noise.GetValue(pos.X, pos.Y);
+                        if (val2 > 0.75f)
+                        {
+                            // open, no decking here
+                            //index = TileDefinition.Wall.TileDefinitionId;
+                        }
+                        else
+                        {
+                            if (pos.Y % 3 == 0)
+                            {
+                                index = TileDefinition.Decking.TileDefinitionId;
+                            }
+                            else
+                            {
+                                index = TileDefinition.Wall.TileDefinitionId;
+                            }
+                        }
+                    }
+
                     chunk[x, y] = new Tile
                     {
                         Location = pos,
-                        SomeTileShit = (byte)(noise.GetValue(chunkX + x, chunkY + y) > 0.5f ? 1 : 0)
+                        TileDefinitionId = index
                     };
                 }
             }
@@ -318,7 +329,7 @@ namespace LudumDare41
         private bool isSolid(Point point)
         {
             var dest = this[point.X, point.Y];
-            var destDef = TileDefinition.Definitions[dest.SomeTileShit];
+            var destDef = TileDefinition.Definitions[dest.TileDefinitionId];
 
             return destDef.Opaque;
         }
@@ -326,7 +337,7 @@ namespace LudumDare41
         private bool isOpaque(Point point)
         {
             var dest = this[point.X, point.Y];
-            var destDef = TileDefinition.Definitions[dest.SomeTileShit];
+            var destDef = TileDefinition.Definitions[dest.TileDefinitionId];
 
             return destDef.Solid;
         }
@@ -424,7 +435,7 @@ namespace LudumDare41
             var point = Player.Tile.Location + moveDir;
 
             var dest = this[point.X, point.Y];
-            var destDef = TileDefinition.Definitions[dest.SomeTileShit];
+            var destDef = TileDefinition.Definitions[dest.TileDefinitionId];
 
             if (destDef.Solid)
             {
@@ -435,12 +446,12 @@ namespace LudumDare41
             if (moveDir.X != 0 && moveDir.Y != 0)
             {
                 var corner1 = this[Player.Tile.Location.X + moveDir.X, Player.Tile.Location.Y];
-                var corner1def = TileDefinition.Definitions[corner1.SomeTileShit];
+                var corner1def = TileDefinition.Definitions[corner1.TileDefinitionId];
                 if (corner1def.Solid)
                     return;
 
                 var corner2 = this[Player.Tile.Location.X, Player.Tile.Location.Y + moveDir.Y];
-                var corner2def = TileDefinition.Definitions[corner2.SomeTileShit];
+                var corner2def = TileDefinition.Definitions[corner2.TileDefinitionId];
                 if (corner2def.Solid)
                     return;
             }
