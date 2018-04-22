@@ -190,6 +190,9 @@ namespace LudumDare41.States
         {
             spriteBatch.Begin();
 
+            spriteBatch.Draw(Assets.Sprites.Background, new Vector2(0, 0), Color.White);
+            spriteBatch.Draw(Assets.Sprites.PlanetSprites, new Vector2(200, 200), Color.White);
+
             var availableMoves = universe.GetAvailableMoves().ToList();
 
             moveThings.Clear();

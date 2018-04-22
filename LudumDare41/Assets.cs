@@ -17,6 +17,8 @@ namespace LudumDare41
         {
             public static Texture2D PixelTexture;
             public static Texture2D SampleSprite;
+            public static Texture2D PlanetSprites;
+            public static Texture2D Background;
         }
 
         public static class Fonts
@@ -39,7 +41,9 @@ namespace LudumDare41
             var contentManager = new CustomContentManager(graphicsDevice, "Content");
 
             Sprites.PixelTexture = new Texture2D(graphicsDevice, 1, 1); Sprites.PixelTexture.SetData(new Color[] { Color.White });
+            Sprites.Background = contentManager.Get<Texture2D>("bg").Content;
             Sprites.SampleSprite = contentManager.Get<Texture2D>("samplesprite").Content;
+            Sprites.PlanetSprites = contentManager.Get<Texture2D>("planets").Content;
 
             Fonts.Japonesa16pt = contentManager.Get<TrueTypeFontLoader>("japonesa").Content.Create(16);
 

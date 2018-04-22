@@ -112,6 +112,8 @@
     <EmbeddedResource Include="Icon.bmp" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\gfx\bg.png" />
+    <Content Include="Content\gfx\planets.png" />
     <Content Include="Content\sfx\pickup.wav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
