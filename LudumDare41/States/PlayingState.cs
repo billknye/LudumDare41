@@ -294,7 +294,7 @@ namespace LudumDare41.States
             {
                 if (value * gameStateManager.GameWidth / max > x)
                 {
-                    spriteBatch.Draw(Assets.Sprites.SampleSprite, new Vector2(x, gameStateManager.GameHeight - 64), new Rectangle(64, 192, 64, 64), color);
+                    spriteBatch.Draw(Assets.Sprites.SampleSprite, new Vector2(x, gameStateManager.GameHeight - 64), new Rectangle(0, 192, 64, 64), color);
                 }
             }
         }
