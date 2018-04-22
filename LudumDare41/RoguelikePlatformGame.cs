@@ -51,7 +51,7 @@ namespace LudumDare41
 
             container.Register<Entities.Behavior.EnemyAttackBehavior>(Reuse.Singleton);
             container.Register<Entities.Behavior.ObstacleAttackBehavior>(Reuse.Singleton);
-
+            container.Register<Entities.Behavior.OxygenTankBehavior>(Reuse.Singleton);
             gameStateManager = container.Resolve<GameStateManager>();
             var intro = container.New<IntroState>();
             gameStateManager.Enter(intro);

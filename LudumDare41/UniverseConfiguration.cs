@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace LudumDare41
+﻿namespace LudumDare41
 {
     public static class UniverseConfiguration
     {
@@ -24,5 +18,7 @@ namespace LudumDare41
         public const int PlayerJetPackDecrease = 20;
 
         public const float MoveTime = 0.2f;
+        public const int PlayerMaxOxigen = 100;
+        public const int ItemOxygenTankAmountToRefill = 10;
     }
 }
