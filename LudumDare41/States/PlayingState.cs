@@ -263,7 +263,7 @@ namespace LudumDare41.States
             spriteBatch.Draw(Assets.Sprites.PixelTexture, new Rectangle(0, 12, (int)(gameStateManager.GameWidth * universe.Player.JetPackFuel / universe.Player.MaxJetPackFuel), 12), Color.Aqua);
 
             // oxygen bar
-            spriteBatch.Draw(Assets.Sprites.PixelTexture, new Rectangle(0, gameStateManager.GameHeight - 12, (int)(gameStateManager.GameWidth * universe.Player.Oxygen / universe.Player.MaxOxygen), 12), Color.DarkCyan);
+            spriteBatch.Draw(Assets.Sprites.PixelTexture, new Rectangle(0, gameStateManager.GameHeight - 12, (int)(gameStateManager.GameWidth * universe.Player.Oxygen / universe.Player.MaxOxygen), 12), Color.Blue);
 
             if (universe.Player.Oxygen < 30)
             {
