@@ -74,8 +74,8 @@ namespace LudumDare41.Entities.Behavior
                 Console.WriteLine(); // what do
             }
 
-            //Both 
-            if (tile.Location == universe.Player.Tile.Location)
+            //If player and enemyr are close enough 
+            if ((Math.Abs(tile.Location.X - universe.Player.Tile.Location.X) + Math.Abs(tile.Location.Y - universe.Player.Tile.Location.Y)) <=1)
             {
                 Combat(enemy);
             }

@@ -478,7 +478,7 @@ namespace LudumDare41
 
             RemoveEntityFromTile(Player);
             AddEntityToTile(Player, dest);
-            
+
             return true;
         }
     }

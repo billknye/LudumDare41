@@ -125,6 +125,7 @@ namespace LudumDare41.States
                         gameStateManager.Leave();
                         gameStateManager.Enter<GameOverState>();
                     }
+
                 }
             }
 
