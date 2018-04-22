@@ -319,7 +319,6 @@ namespace LudumDare41
         {
             return isSolid(entity.Tile.Location + new Point(0, 1));
         }
-
         internal void DoTick(Point? moveDir = null)
         {
             if (moveDir != null)
@@ -348,7 +347,6 @@ namespace LudumDare41
             {
                 return; // no thanks 
             }
-
 
             if (isOnLand(Player))
             {
@@ -412,14 +410,7 @@ namespace LudumDare41
             EntityFromTile(Player);
             EntityToTile(Player, dest);
 
-
             Console.WriteLine(Player.Velocity);
-        }
-
-        private void Combat(Enemy enemy)
-        {
-            Player.HitPoints = Player.HitPoints - Random.Next(1, enemy.BaseAttack);
-            enemy.HitPoints = enemy.HitPoints - Random.Next(1, Player.BaseAttack);                     
         }
     }
 }

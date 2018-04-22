@@ -10,6 +10,8 @@ namespace LudumDare41.States
 {
     public class PlayingState : GameState
     {
+        const int tileSize = UniverseConfiguration.TileSize;
+
         KeyboardState lastKeyboard;
         MouseState lastMouse;
 
@@ -110,8 +112,6 @@ namespace LudumDare41.States
             lastKeyboard = keyboard;
         }
 
-
-
         private bool wasKeyJustPressed(Keys key, KeyboardState keyboard, KeyboardState lastKeyboard)
         {
             return keyboard.IsKeyDown(key) && lastKeyboard.IsKeyUp(key);
@@ -133,22 +133,22 @@ namespace LudumDare41.States
 
                 var light = tile.Light;
 
-                spriteBatch.Draw(Assets.Sprites.SampleSprite, new Vector2((tile.Location.X - viewOffset.X) * 64, (tile.Location.Y - viewOffset.Y) * 64), new Rectangle((spriteIndex % 4) * 64, (spriteIndex / 4) * 64, 64, 64), getLightColor(light));
+                spriteBatch.Draw(Assets.Sprites.SampleSprite, new Vector2((tile.Location.X - viewOffset.X) * tileSize, (tile.Location.Y - viewOffset.Y) * tileSize), new Rectangle((spriteIndex % 4) * tileSize, (spriteIndex / 4) * tileSize, tileSize, tileSize), getLightColor(light));
 
                 if (availableMoves.Contains(tile))
                 {
-                    var loc = new Vector2((tile.Location.X - viewOffset.X) * 64, (tile.Location.Y - viewOffset.Y) * 64);
-                    moveThings.Add(Tuple.Create(new Rectangle((int)loc.X, (int)loc.Y, 64, 64), tile.Location));
-                    spriteBatch.Draw(Assets.Sprites.SampleSprite, loc, new Rectangle(192, 0, 64, 64),
+                    var loc = new Vector2((tile.Location.X - viewOffset.X) * tileSize, (tile.Location.Y - viewOffset.Y) * tileSize);
+                    moveThings.Add(Tuple.Create(new Rectangle((int)loc.X, (int)loc.Y, tileSize, tileSize), tile.Location));
+                    spriteBatch.Draw(Assets.Sprites.SampleSprite, loc, new Rectangle(192, 0, tileSize, tileSize),
                         Color.FromNonPremultiplied(0, 255, 0, 255 - (int)(Vector2.Distance(new Vector2(gameStateManager.GameWidth / 2, gameStateManager.GameHeight / 2), new Vector2(lastMouse.Position.X, lastMouse.Position.Y))))
                         );
                 }
 
-                spriteBatch.DrawString(Assets.Fonts.Japonesa16pt, $"{tile.Location.X},{tile.Location.Y}", new Vector2((tile.Location.X - viewOffset.X) * 64 + 2, (tile.Location.Y - viewOffset.Y) * 64 + 40), Color.Black);
+                spriteBatch.DrawString(Assets.Fonts.Japonesa16pt, $"{tile.Location.X},{tile.Location.Y}", new Vector2((tile.Location.X - viewOffset.X) * tileSize + 2, (tile.Location.Y - viewOffset.Y) * tileSize + 40), Color.Black);
                 foreach (var entity in tile.Entities)
                 {
                     var entSprite = entity.SpriteIndex;
-                    spriteBatch.Draw(Assets.Sprites.SampleSprite, new Vector2((tile.Location.X - viewOffset.X) * UniverseConfiguration.TileSize, (tile.Location.Y - viewOffset.Y) * UniverseConfiguration.TileSize), new Rectangle((entSprite % 4) * 64, (entSprite / 4) * 64, UniverseConfiguration.TileSize, UniverseConfiguration.TileSize), getLightColor(light), 0f, Vector2.Zero, 1f, entity.SpriteEffects, 0f);
+                    spriteBatch.Draw(Assets.Sprites.SampleSprite, new Vector2((tile.Location.X - viewOffset.X) * UniverseConfiguration.TileSize, (tile.Location.Y - viewOffset.Y) * UniverseConfiguration.TileSize), new Rectangle((entSprite % 4) * tileSize, (entSprite / 4) * tileSize, UniverseConfiguration.TileSize, UniverseConfiguration.TileSize), getLightColor(light), 0f, Vector2.Zero, 1f, entity.SpriteEffects, 0f);
                 }
             });
 
