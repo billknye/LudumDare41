@@ -354,11 +354,19 @@ namespace LudumDare41
                 else
                 {
                     Player.JetPackFuel -= Player.JetPackDecreaseFuel;
+                    if(Player.JetPackFuel < 0)
+                    {
+                        Player.JetPackFuel = 0;
+                    }
                 }
             }
             else if (Player.JetPackFuel < Player.MaxJetPackFuel)
             {
                 Player.JetPackFuel += Player.JetPackIncreaseFuel;
+                if(Player.JetPackFuel > Player.MaxJetPackFuel)
+                {
+                    Player.JetPackFuel = Player.MaxJetPackFuel;
+                }
             }
 
             // Tick-ing
