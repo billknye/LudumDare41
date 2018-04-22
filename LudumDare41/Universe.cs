@@ -210,6 +210,7 @@ namespace LudumDare41
                 }
 
                 entity.Tile.Entities.Remove(entity);
+                entity.PreviousTile = entity.Tile;
                 entity.Tile = null;
             });
         }

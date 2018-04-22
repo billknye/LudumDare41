@@ -8,6 +8,8 @@ namespace LudumDare41.Entities
     {
         public Tile Tile { get; set; }
 
+        public Tile PreviousTile { get; set; }
+
         public virtual int SpriteIndex => 2;
 
         public virtual int LightEmitted => 0;

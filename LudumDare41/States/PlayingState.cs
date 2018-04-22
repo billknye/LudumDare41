@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using LudumDare41.ContentManagement;
+using LudumDare41.Entities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -16,8 +17,9 @@ namespace LudumDare41.States
         MouseState lastMouse;
 
         List<Tuple<Rectangle, Point>> moveThings;
+        TimeSpan? animationTimer;
 
-        Point viewOffset;
+        Vector2 viewOffset;
         Universe universe;
         private readonly GameStateManager gameStateManager;
         private readonly SpriteBatch spriteBatch;
@@ -111,11 +113,21 @@ namespace LudumDare41.States
             if (dest != Point.Zero)
             {
                 universe.DoTick(dest);
+                animationTimer = TimeSpan.FromSeconds(UniverseConfiguration.MoveTime);
 
                 if ((universe.Player.Oxygen <= 0) || (universe.Player.HitPoints <= 0))
                 {
                     gameStateManager.Leave();
                     gameStateManager.Enter<GameOverState>();
+                }
+            }
+
+            if (animationTimer != null)
+            {
+                animationTimer -= gameTime.ElapsedGameTime;
+                if (animationTimer.Value.TotalSeconds < 0)
+                {
+                    animationTimer = null;
                 }
             }
 
@@ -132,7 +144,7 @@ namespace LudumDare41.States
                 {
                     BaseColor = Color.Cyan,
                     Expiration = gameTime.TotalGameTime.Add(TimeSpan.FromSeconds(1)),
-                    Position = universe.Player.Tile.Location.ToVector2() + new Vector2(0.5f, 0.2f),
+                    Position = getEntityWorldPos(universe.Player) + new Vector2(0.5f, 0.2f),
                     Velocity = Vector2.Transform(new Vector2(1, 0), mat) * 2.0f,
                 };
 
@@ -150,7 +162,7 @@ namespace LudumDare41.States
                     {
                         BaseColor = Color.Orange,
                         Expiration = gameTime.TotalGameTime.Add(TimeSpan.FromSeconds(0.5f)),
-                        Position = universe.Player.Tile.Location.ToVector2() + new Vector2(0.25f, 0.7f) + (universe.Player.LastMoveLeft ? new Vector2(0.5f, 0f) : Vector2.Zero),
+                        Position = getEntityWorldPos(universe.Player) + new Vector2(0.25f, 0.7f) + (universe.Player.LastMoveLeft ? new Vector2(0.5f, 0f) : Vector2.Zero),
                         Velocity = Vector2.Transform(new Vector2(0, 1), mat) * (2.0f + (float)universe.Random.NextDouble() * 0.5f),
                     };
 
@@ -158,11 +170,12 @@ namespace LudumDare41.States
                 }
             }
 
-            var width = (int)Math.Ceiling(gameStateManager.Window.ClientBounds.Width / (double)UniverseConfiguration.TileSize);
-            var height = (int)Math.Ceiling(gameStateManager.Window.ClientBounds.Height / (double)UniverseConfiguration.TileSize);
+            var width = (float)Math.Ceiling(gameStateManager.Window.ClientBounds.Width / (double)UniverseConfiguration.TileSize);
+            var height = (float)Math.Ceiling(gameStateManager.Window.ClientBounds.Height / (double)UniverseConfiguration.TileSize);
 
             // make player be center
-            viewOffset = new Point(-width / 2 + universe.Player.Tile.Location.X, -height / 2 + universe.Player.Tile.Location.Y);
+            var playerPos = getEntityWorldPos(universe.Player);
+            viewOffset = new Vector2(-width / 2 + playerPos.X, -height / 2 + playerPos.Y);
             
             lastMouse = mouse;
             lastKeyboard = keyboard;
@@ -201,7 +214,7 @@ namespace LudumDare41.States
 
                 if (availableMoves.Contains(tile))
                 {
-                    var loc = new Vector2((tile.Location.X - viewOffset.X) * tileSize, (tile.Location.Y - viewOffset.Y) * tileSize);
+                    var loc = (tile.Location.ToVector2() - viewOffset) * tileSize;
                     moveThings.Add(Tuple.Create(new Rectangle((int)loc.X, (int)loc.Y, tileSize, tileSize), tile.Location));
                     spriteBatch.Draw(Assets.Sprites.SampleSprite, loc, new Rectangle(192, 0, tileSize, tileSize),
                         Color.FromNonPremultiplied(0, 255, 0, 255 - (int)(Vector2.Distance(new Vector2(gameStateManager.GameWidth / 2, gameStateManager.GameHeight / 2), new Vector2(lastMouse.Position.X, lastMouse.Position.Y))))
@@ -215,7 +228,7 @@ namespace LudumDare41.States
             foreach (var particle in particles)
             {
                 var color = Color.FromNonPremultiplied(particle.BaseColor.R, particle.BaseColor.G, particle.BaseColor.B, Math.Min(255, (int)((particle.Expiration - gameTime.TotalGameTime).TotalSeconds * 255.0)));
-                spriteBatch.Draw(Assets.Sprites.PixelTexture, (particle.Position - viewOffset.ToVector2()) * UniverseConfiguration.TileSize, color);
+                spriteBatch.Draw(Assets.Sprites.PixelTexture, (particle.Position - viewOffset) * UniverseConfiguration.TileSize, color);
             }
 
             // entities
@@ -226,7 +239,9 @@ namespace LudumDare41.States
                 foreach (var entity in tile.Entities)
                 {
                     var entSprite = entity.SpriteIndex;
-                    spriteBatch.Draw(Assets.Sprites.SampleSprite, new Vector2((tile.Location.X - viewOffset.X) * UniverseConfiguration.TileSize, (tile.Location.Y - viewOffset.Y) * UniverseConfiguration.TileSize), new Rectangle((entSprite % 4) * tileSize, (entSprite / 4) * tileSize, UniverseConfiguration.TileSize, UniverseConfiguration.TileSize), getLightColor(light), 0f, Vector2.Zero, 1f, entity.SpriteEffects, 0f);
+                    var pos = getEntityScreenPos(entity);
+
+                    spriteBatch.Draw(Assets.Sprites.SampleSprite, pos, new Rectangle((entSprite % 4) * tileSize, (entSprite / 4) * tileSize, UniverseConfiguration.TileSize, UniverseConfiguration.TileSize), getLightColor(light), 0f, Vector2.Zero, 1f, entity.SpriteEffects, 0f);
                 }
             }
 
@@ -251,10 +266,30 @@ namespace LudumDare41.States
 
         private Color getLightColor(int light)
         {
+            return Color.White;
             var num = Math.Min(255, light * 32);
             num = Math.Max(32, num);
 
             return new Color(num, num, num);
+        }
+
+        public Vector2 getEntityScreenPos(Entity entity)
+        {
+            return (getEntityWorldPos(entity) - viewOffset) * UniverseConfiguration.TileSize;
+        }
+
+
+        public Vector2 getEntityWorldPos(Entity entity)
+        {
+            var pos = new Vector2((entity.Tile.Location.X), (entity.Tile.Location.Y));
+
+            if (animationTimer.HasValue && entity.PreviousTile != null && entity.PreviousTile != entity.Tile)
+            {
+                var delta = entity.PreviousTile.Location - entity.Tile.Location;
+                pos += delta.ToVector2() * (float)animationTimer.Value.TotalSeconds / UniverseConfiguration.MoveTime;
+            }
+
+            return pos;
         }
     }
 

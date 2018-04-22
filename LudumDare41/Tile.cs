@@ -31,6 +31,8 @@ namespace LudumDare41
         {
             foreach (var ent in Entities)
             {
+                ent.PreviousTile = null;
+
                 if (ent.Behavior != null)
                 {
                     var behavior = container.New(ent.Behavior) as EntityBehavior;

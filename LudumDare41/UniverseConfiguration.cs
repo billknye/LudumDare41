@@ -22,5 +22,7 @@ namespace LudumDare41
         public const int PlayerMaxJetPackFuel = 100;
         public const int PlayerJetPackIncrease = 20;
         public const int PlayerJetPackDecrease = 20;
+
+        public const float MoveTime = 0.2f;
     }
 }
