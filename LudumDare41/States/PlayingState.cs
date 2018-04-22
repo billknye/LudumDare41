@@ -274,7 +274,8 @@ namespace LudumDare41.States
             spriteBatch.Draw(Assets.Sprites.PixelTexture, new Rectangle(0, 12, (int)(gameStateManager.GameWidth * universe.Player.JetPackFuel / universe.Player.MaxJetPackFuel), 12), Color.Aqua);
 
             // oxygen bar
-            spriteBatch.Draw(Assets.Sprites.PixelTexture, new Rectangle(0, gameStateManager.GameHeight - 12, (int)(gameStateManager.GameWidth * universe.Player.Oxygen / universe.Player.MaxOxygen), 12), Color.Blue);
+            //spriteBatch.Draw(Assets.Sprites.PixelTexture, new Rectangle(0, gameStateManager.GameHeight - 12, (int)(gameStateManager.GameWidth * universe.Player.Oxygen / universe.Player.MaxOxygen), 12), Color.Blue);
+            drawBar(universe.Player.Oxygen, universe.Player.MaxOxygen, Color.Blue);
 
             if (universe.Player.Oxygen < 30)
             {
@@ -285,6 +286,17 @@ namespace LudumDare41.States
             spriteBatch.Draw(Assets.Sprites.PixelTexture, new Rectangle(0, 0, (int)(gameStateManager.GameWidth * universe.Player.HitPoints / UniverseConfiguration.PlayerInitialHP), 12), Color.Red);
 
             spriteBatch.End();
+        }
+
+        private void drawBar(float value, float max, Color color)
+        {
+            for (int x = 0; x < gameStateManager.GameWidth; x += 64)
+            {
+                if (value * gameStateManager.GameWidth / max > x)
+                {
+                    spriteBatch.Draw(Assets.Sprites.SampleSprite, new Vector2(x, gameStateManager.GameHeight - 64), new Rectangle(64, 192, 64, 64), color);
+                }
+            }
         }
 
         private Color getLightColor(int light)
