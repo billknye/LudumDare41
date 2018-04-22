@@ -20,11 +20,14 @@ namespace LudumDare41.States
         private readonly GameStateManager gameStateManager;
         private readonly SpriteBatch spriteBatch;
 
+        private List<Particle> particles;
+
         public PlayingState(GameStateManager gameStateManager, SpriteBatch spriteBatch, Universe universe)
         {
             this.gameStateManager = gameStateManager;
             this.spriteBatch = spriteBatch;
             this.universe = universe;
+            this.particles = new List<Particle>();
         }
 
         public override void Entered()
@@ -100,6 +103,26 @@ namespace LudumDare41.States
                 }
             }
 
+            // particles update
+            particles.RemoveAll(n => n.Expiration < gameTime.TotalGameTime);
+            particles.ForEach(n => n.Position += n.Velocity * (float)gameTime.ElapsedGameTime.TotalSeconds);
+
+            for (int n = 0; n < 1; n++)
+            {
+                var dir = MathHelper.TwoPi * universe.Random.NextDouble();
+                var mat = Matrix.CreateRotationZ((float)dir);
+
+                var air = new Particle
+                {
+                    BaseColor = Color.Cyan,
+                    Expiration = gameTime.TotalGameTime.Add(TimeSpan.FromSeconds(1)),
+                    Position = universe.Player.Tile.Location.ToVector2() + new Vector2(0.5f, 0.2f),
+                    Velocity = Vector2.Transform(new Vector2(1, 0), mat) * 2.0f,
+                };
+
+                particles.Add(air);
+            }
+
             var width = (int)Math.Ceiling(gameStateManager.Window.ClientBounds.Width / (double)UniverseConfiguration.TileSize);
             var height = (int)Math.Ceiling(gameStateManager.Window.ClientBounds.Height / (double)UniverseConfiguration.TileSize);
 
@@ -125,7 +148,15 @@ namespace LudumDare41.States
 
             moveThings.Clear();
 
+            var tiles = new List<Tile>();
+
             universe.GetTilesInRange(universe.Player.Tile.Location.X, universe.Player.Tile.Location.Y, 5, tile =>
+            {
+                tiles.Add(tile);
+            });
+
+            // tiles
+            foreach (var tile in tiles)
             {
                 var spriteIndex = tile.Definition.SpriteIndex;
                 if (spriteIndex == 8)
@@ -145,12 +176,27 @@ namespace LudumDare41.States
                 }
 
                 spriteBatch.DrawString(Assets.Fonts.Japonesa16pt, $"{tile.Location.X},{tile.Location.Y}", new Vector2((tile.Location.X - viewOffset.X) * 64 + 2, (tile.Location.Y - viewOffset.Y) * 64 + 40), Color.Black);
+            }
+
+            // particles
+            foreach (var particle in particles)
+            {
+                var color = Color.FromNonPremultiplied(particle.BaseColor.R, particle.BaseColor.G, particle.BaseColor.B, Math.Min(255, (int)((particle.Expiration - gameTime.TotalGameTime).TotalSeconds * 255.0)));
+                spriteBatch.Draw(Assets.Sprites.PixelTexture, (particle.Position - viewOffset.ToVector2()) * UniverseConfiguration.TileSize, color);
+            }
+
+            // entities
+            foreach (var tile in tiles)
+            {
+                var light = tile.Light;
+
                 foreach (var entity in tile.Entities)
                 {
                     var entSprite = entity.SpriteIndex;
                     spriteBatch.Draw(Assets.Sprites.SampleSprite, new Vector2((tile.Location.X - viewOffset.X) * UniverseConfiguration.TileSize, (tile.Location.Y - viewOffset.Y) * UniverseConfiguration.TileSize), new Rectangle((entSprite % 4) * 64, (entSprite / 4) * 64, UniverseConfiguration.TileSize, UniverseConfiguration.TileSize), getLightColor(light), 0f, Vector2.Zero, 1f, entity.SpriteEffects, 0f);
                 }
-            });
+            }
+
 
             // UI
 
@@ -175,5 +221,13 @@ namespace LudumDare41.States
 
             return new Color(num, num, num);
         }
+    }
+
+    public class Particle
+    {
+        public TimeSpan Expiration;
+        public Vector2 Velocity;
+        public Vector2 Position;
+        public Color BaseColor;
     }
 }
