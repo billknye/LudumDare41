@@ -16,7 +16,7 @@ namespace LudumDare41.Entities.Behavior
             var tank = entity as OxygenTank;
             var tile = tank.Tile;
 
-            if (universe.Player.FutureTile != null && tile.Location == universe.Player.FutureTile.Location)
+            if (tile.Location == universe.Player.Tile.Location)
             {
                 Assets.SoundEffects.Pickup.Play();
                 FillOxygen(tank);

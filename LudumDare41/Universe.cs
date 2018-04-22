@@ -50,7 +50,6 @@ namespace LudumDare41
             AddObstacles();
             AddEnemies();
 
-            DoTick();
 
             Console.WriteLine();
         }
@@ -180,61 +179,55 @@ namespace LudumDare41
 
         public void AddEntityToTile(Entity entity, Tile tile)
         {
-            thingsToDoAfterTick.Add(() =>
+            entity.Tile = tile;
+            tile.Entities.Add(entity);
+
+            /*if (entity.LightEmitted > 0)
             {
-                entity.Tile = tile;
-                tile.Entities.Add(entity);
+                var ent = entity.Tile.Location;
+                GridFieldOfView.ComputeFieldOfViewWithShadowCasting(
+                    ent.X,
+                    ent.Y,
+                    entity.LightEmitted,
+                    (x, y) => isOpaque(new Point(x, y)),
+                    (x, y) =>
+                    {
+                        var delta = new Point(Math.Abs(x - ent.X), Math.Abs(y - ent.Y));
+                        var dist = (int)Math.Floor(Math.Sqrt((delta.X * delta.X) + (delta.Y * delta.Y)));
 
-                if (entity.LightEmitted > 0)
-                {
-                    var ent = entity.Tile.Location;
-                    GridFieldOfView.ComputeFieldOfViewWithShadowCasting(
-                        ent.X,
-                        ent.Y,
-                        entity.LightEmitted,
-                        (x, y) => isOpaque(new Point(x, y)),
-                        (x, y) =>
-                        {
-                            var delta = new Point(Math.Abs(x - ent.X), Math.Abs(y - ent.Y));
-                            var dist = (int)Math.Floor(Math.Sqrt((delta.X * delta.X) + (delta.Y * delta.Y)));
+                        if (dist > entity.LightEmitted)
+                            return;
 
-                            if (dist > entity.LightEmitted)
-                                return;
-
-                            this[x, y].Light += (entity.LightEmitted - dist);
-                        });
-                }
-            });
+                        this[x, y].Light += (entity.LightEmitted - dist);
+                    });
+            }*/
         }
 
         public void RemoveEntityFromTile(Entity entity)
         {
-            thingsToDoAfterTick.Add(() =>
+            /*if (entity.LightEmitted > 0)
             {
-                if (entity.LightEmitted > 0)
-                {
-                    var ent = entity.Tile.Location;
-                    GridFieldOfView.ComputeFieldOfViewWithShadowCasting(
-                        ent.X,
-                        ent.Y,
-                        entity.LightEmitted,
-                        (x, y) => isOpaque(new Point(x, y)),
-                        (x, y) =>
-                        {
-                            var delta = new Point(Math.Abs(x - ent.X), Math.Abs(y - ent.Y));
-                            var dist = (int)Math.Floor(Math.Sqrt((delta.X * delta.X) + (delta.Y * delta.Y)));
+                var ent = entity.Tile.Location;
+                GridFieldOfView.ComputeFieldOfViewWithShadowCasting(
+                    ent.X,
+                    ent.Y,
+                    entity.LightEmitted,
+                    (x, y) => isOpaque(new Point(x, y)),
+                    (x, y) =>
+                    {
+                        var delta = new Point(Math.Abs(x - ent.X), Math.Abs(y - ent.Y));
+                        var dist = (int)Math.Floor(Math.Sqrt((delta.X * delta.X) + (delta.Y * delta.Y)));
 
-                            if (dist > entity.LightEmitted)
-                                return;
+                        if (dist > entity.LightEmitted)
+                            return;
 
-                            this[x, y].Light -= (entity.LightEmitted - dist);
-                        });
-                }
+                        this[x, y].Light -= (entity.LightEmitted - dist);
+                    });
+            }*/
 
-                entity.Tile.Entities.Remove(entity);
-                entity.PreviousTile = entity.Tile;
-                entity.Tile = null;
-            });
+            entity.Tile.Entities.Remove(entity);
+            entity.PreviousTile = entity.Tile;
+            entity.Tile = null;
         }
 
         public IEnumerable<Tile> GetAvailableMoves()
@@ -473,7 +466,6 @@ namespace LudumDare41
             else if (moveDir.X > 0)
                 Player.LastMoveLeft = false;
 
-            Player.FutureTile = dest;
             RemoveEntityFromTile(Player);
             AddEntityToTile(Player, dest);
 
