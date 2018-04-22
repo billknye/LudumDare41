@@ -10,17 +10,11 @@
         public const int MaxNumberOfObstacles = 100;
 
 
-        // Squidward 
-        public const int SquidwardMinHP = 100;
-        public const int SquidwardMaxHP = 10;
-        public const int SquidwardBaseAttack = 10;
-        public const int SquidwardNumberOfEnemies = 75;
-
-        // MrMander
-        public const int MrManderMinHP = 100;
-        public const int MrManderMaxHP = 10;
-        public const int MrManderBaseAttack = 20;
-        public const int MrManderNumberOfEnemies = 25;
+        // Enemy 
+        public const int EnemyMinHP = 100;
+        public const int EnemyMaxHP = 10;
+        public const int EnemyBaseAttack = 10;
+        public const int NumberOfEnemies = 75;
 
         // Player
         public const int PlayerInitialHP = 100;
@@ -33,6 +27,6 @@
         public const int PlayerMaxOxigen = 100;
         public const int ItemOxygenTankAmountToRefill = 10;
 
-        public static int TotalEnemies { get { return SquidwardNumberOfEnemies + MrManderNumberOfEnemies; } }
+        public static int TotalEnemies { get { return NumberOfEnemies; } }
     }
 }

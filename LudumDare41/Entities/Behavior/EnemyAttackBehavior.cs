@@ -24,6 +24,9 @@ namespace LudumDare41.Entities.Behavior
 
             var tile = enemy.Tile;
 
+            if (Vector2.DistanceSquared(tile.Location.ToVector2(), universe.Player.Tile.Location.ToVector2()) > 25)
+                return;
+
             // move towards da player...
             var dx = Math.Sign(universe.Player.Tile.Location.X - tile.Location.X);
             var dy = Math.Sign(universe.Player.Tile.Location.Y - tile.Location.Y);
