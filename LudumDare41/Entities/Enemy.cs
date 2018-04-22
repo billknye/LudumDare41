@@ -7,13 +7,19 @@ namespace LudumDare41.Entities
 {
     public class Enemy : Entity
     {
+        private int spriteIndex = 6;
         public int HitPoints { get; set; }
         public int BaseAttack { get; set; }
         public int ModifierAttack { get; set; }
 
         public Point Velocity { get; set; }
 
-        public override int SpriteIndex => 6;
+        public override int SpriteIndex
+        {
+            get => spriteIndex;
+
+            set => spriteIndex = value;
+        }
 
         public override Type Behavior => typeof(EnemyAttackBehavior);
 

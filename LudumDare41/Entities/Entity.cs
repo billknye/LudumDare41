@@ -6,11 +6,16 @@ namespace LudumDare41.Entities
 {
     public abstract class Entity
     {
+        private int spriteIndex;
         public Tile Tile { get; set; }
 
         public Tile PreviousTile { get; set; }
 
-        public virtual int SpriteIndex => 2;
+        public virtual int SpriteIndex
+        {
+            get => spriteIndex;
+            set => spriteIndex = value;     
+        }
 
         public virtual int LightEmitted => 0;
 

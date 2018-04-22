@@ -40,9 +40,10 @@ namespace LudumDare41
             }
 
             //REMOVE THIS. Set single enemy close to player
-            var singleEnemy = container.New<Squidward>();
+            var singleEnemy = container.New<Enemy>();
             singleEnemy.HitPoints = UniverseConfiguration.SquidwardMaxHP;
             singleEnemy.BaseAttack = UniverseConfiguration.SquidwardBaseAttack;
+            singleEnemy.SpriteIndex = 5;
 
             AddEntityToTile(singleEnemy, this[3, 0]);
 
@@ -53,50 +54,27 @@ namespace LudumDare41
             AddEntityToTile(Player, this[0, 0]);
 
             AddObstacles();
-            //AddEnemies<Squidward>();
-            //AddEnemies<MrMander>();
-            AddSquids();
-            AddSalamanders();
+            AddEnemies();
 
             DoTick();
 
             Console.WriteLine();
         }
 
-        private void AddSquids()
+        private void AddEnemies()
         {
+            int[] kindOfEnemy = { 5, 6 }; //5 = Mr. Mander, 6 = Squid
+
             for(var i = 0; i <= UniverseConfiguration.SquidwardNumberOfEnemies; ++i)
             {
-                Squidward squid = container.New<Squidward>();
-                squid.HitPoints = UniverseConfiguration.SquidwardMaxHP;
-                squid.BaseAttack = UniverseConfiguration.SquidwardBaseAttack;
-                AddEntityToTile(squid, this[Random.Next(1, UniverseConfiguration.TotalEnemies), Random.Next(1, UniverseConfiguration.TotalEnemies)]);
+                Enemy enemy = container.New<Enemy>();
+                enemy.HitPoints = UniverseConfiguration.SquidwardMaxHP;
+                enemy.BaseAttack = UniverseConfiguration.SquidwardBaseAttack;
+                enemy.SpriteIndex = kindOfEnemy[Random.Next(kindOfEnemy.Length)];
+                AddEntityToTile(enemy, this[Random.Next(1, UniverseConfiguration.TotalEnemies), Random.Next(1, UniverseConfiguration.TotalEnemies)]);
             }
         }
 
-        private void AddSalamanders()
-        {
-            for(var i = 0; i <= UniverseConfiguration.MrManderNumberOfEnemies; ++i)
-            {
-                MrMander mm = container.New<MrMander>();
-                mm.HitPoints = UniverseConfiguration.MrManderMaxHP;
-                mm.BaseAttack = UniverseConfiguration.MrManderBaseAttack;
-                AddEntityToTile(mm, this[Random.Next(1, UniverseConfiguration.TotalEnemies), Random.Next(1, UniverseConfiguration.TotalEnemies)]);
-            }
-        }
-
-        // Convert to this for later with other enemies?
-        // Would need to make the UniverseConfiguration configs type dependant
-        //private void AddEnemies<T>()  where T : Enemy
-        //{
-        //    for (int i = 0; i <= UniverseConfiguration.NumberOfEnemies; i++)
-        //    {
-        //        Enemy enemy = container.New<Enemy>();
-        //        enemy.HitPoints = UniverseConfiguration.SquidwardMaxHP;
-        //        enemy.BaseAttack = UniverseConfiguration.SquidwardBaseAttack;
-        //        AddEntityToTile(enemy, this[Random.Next(1, UniverseConfiguration.NumberOfEnemies), Random.Next(1, UniverseConfiguration.NumberOfEnemies)]);
-        //    }
-        //}
 
         private void AddObstacles()
         {
@@ -117,17 +95,6 @@ namespace LudumDare41
                 var tile = this[x, y];
                 doThing(tile);
             });
-
-
-            /*for (int x = viewRectangle.X; x < viewRectangle.Right; x++)
-            {
-                for (int y = viewRectangle.Y; y < viewRectangle.Bottom; y++)
-                {
-                    var tile = this[x, y];
-
-                    doThing(tile);
-                }
-            }*/
         }
 
         public Tile this[int x, int y]

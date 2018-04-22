@@ -49,8 +49,7 @@ namespace LudumDare41
             container.Register<GameStateManager>(Reuse.Singleton);
             container.Register<Universe>(Reuse.Singleton);
 
-            container.Register<Entities.Behavior.SquidwardAttackBehavior>(Reuse.Singleton);
-            container.Register<Entities.Behavior.MrManderAttackBehavior>(Reuse.Singleton);
+            container.Register<Entities.Behavior.EnemyAttackBehavior>(Reuse.Singleton);
             container.Register<Entities.Behavior.ObstacleAttackBehavior>(Reuse.Singleton);
             container.Register<Entities.Behavior.OxygenTankBehavior>(Reuse.Singleton);
             gameStateManager = container.Resolve<GameStateManager>();
