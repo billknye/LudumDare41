@@ -29,13 +29,12 @@ namespace LudumDare41
 
         public void Tick(Container container)
         {
-            foreach (var ent in Entities)
+            foreach (var ent in Entities.ToArray())
             {
                 ent.PreviousTile = null;
 
                 if (ent.Behavior != null)
                 {
-
                     var behavior = container.New(ent.Behavior) as EntityBehavior;
                     behavior.Tick(ent);
                 }

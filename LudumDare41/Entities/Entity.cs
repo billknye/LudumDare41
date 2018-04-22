@@ -8,7 +8,6 @@ namespace LudumDare41.Entities
     {
         private int spriteIndex;
 
-        public Tile FutureTile { get; set; }
         public Tile Tile { get; set; }
         public Tile PreviousTile { get; set; }
 
