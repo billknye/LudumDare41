@@ -7,8 +7,9 @@ namespace LudumDare41.Entities
     public abstract class Entity
     {
         private int spriteIndex;
-        public Tile Tile { get; set; }
 
+        public Tile FutureTile { get; set; }
+        public Tile Tile { get; set; }
         public Tile PreviousTile { get; set; }
 
         public virtual int SpriteIndex

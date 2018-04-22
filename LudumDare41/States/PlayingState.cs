@@ -217,8 +217,8 @@ namespace LudumDare41.States
             foreach (var tile in tiles)
             {
                 var spriteIndex = tile.Definition.SpriteIndex;
-                if (spriteIndex == 8)
-                    spriteIndex += Math.Abs((tile.Location.X * 23 + tile.Location.Y * 5) % 8);
+                //if (spriteIndex == 8)
+                 //   spriteIndex += Math.Abs((tile.Location.X * 23 + tile.Location.Y * 5) % 8);
 
                 var light = tile.Light;
 

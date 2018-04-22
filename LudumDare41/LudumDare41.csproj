@@ -45,7 +45,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="ChunkOfSpace.cs" />
+    <Compile Include="Entities\Behavior\EnemyAttackBehavior.cs" />
     <Compile Include="Entities\Behavior\EntityBehavior.cs" />
+    <Compile Include="Entities\Behavior\ObstacleAttackBehavior.cs" />
+    <Compile Include="Entities\Behavior\OxygenTankBehavior.cs" />
     <Compile Include="Entities\Item.cs" />
     <Compile Include="Entities\OxygenTank.cs" />
     <Compile Include="States\GameState.cs" />

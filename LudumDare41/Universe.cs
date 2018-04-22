@@ -44,7 +44,7 @@ namespace LudumDare41
             AddEntityToTile(singleEnemy, this[3, 0]);
 
             var o2Tank = new OxygenTank() { };
-            AddEntityToTile(o2Tank, this[10, -3]);
+            AddEntityToTile(o2Tank, this[4, 1]);
 
             Player = new Player() { HitPoints = UniverseConfiguration.PlayerInitialHP, BaseAttack = UniverseConfiguration.PlayerBaseAttack };
             AddEntityToTile(Player, this[0, 0]);
@@ -466,6 +466,7 @@ namespace LudumDare41
             else if (moveDir.X > 0)
                 Player.LastMoveLeft = false;
 
+            Player.FutureTile = dest;
             RemoveEntityFromTile(Player);
             AddEntityToTile(Player, dest);
 
