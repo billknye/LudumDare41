@@ -139,6 +139,25 @@ namespace LudumDare41.States
                 particles.Add(air);
             }
 
+            if (universe.Player.JetPackOn)
+            {
+                for (int n = 0; n < 5; n++)
+                {
+                    var dir = ((float)universe.Random.NextDouble() - 0.5f) * 0.2f;
+                    var mat = Matrix.CreateRotationZ((float)dir);
+
+                    var air = new Particle
+                    {
+                        BaseColor = Color.Orange,
+                        Expiration = gameTime.TotalGameTime.Add(TimeSpan.FromSeconds(0.5f)),
+                        Position = universe.Player.Tile.Location.ToVector2() + new Vector2(0.25f, 0.7f) + (universe.Player.LastMoveLeft ? new Vector2(0.5f, 0f) : Vector2.Zero),
+                        Velocity = Vector2.Transform(new Vector2(0, 1), mat) * (2.0f + (float)universe.Random.NextDouble() * 0.5f),
+                    };
+
+                    particles.Add(air);
+                }
+            }
+
             var width = (int)Math.Ceiling(gameStateManager.Window.ClientBounds.Width / (double)UniverseConfiguration.TileSize);
             var height = (int)Math.Ceiling(gameStateManager.Window.ClientBounds.Height / (double)UniverseConfiguration.TileSize);
 
