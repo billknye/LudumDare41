@@ -93,9 +93,19 @@ namespace LudumDare41.States
             {
                 dest = new Point(1, -1);
             }
+            
+            // Handle Jetpack on/off
             if(wasKeyJustPressed(Keys.Space, keyboard, lastKeyboard))
             {
-                universe.Player.JetPackOn = true;
+                var player = universe.Player;
+                if(!player.JetPackOn && player.JetPackFuel > 0)
+                {
+                    player.JetPackOn = true;
+                }
+                else if (player.JetPackOn)
+                {
+                    player.JetPackOn = false;
+                }
             }
 
             if (dest != Point.Zero)
@@ -203,6 +213,8 @@ namespace LudumDare41.States
 
 
             // UI
+            // jetpack bar
+            spriteBatch.Draw(Assets.Sprites.PixelTexture, new Rectangle(0, 12, (int)(gameStateManager.GameWidth * universe.Player.JetPackFuel / universe.Player.MaxJetPackFuel), 12), Color.Aqua);
 
             // oxygen bar
             spriteBatch.Draw(Assets.Sprites.PixelTexture, new Rectangle(0, gameStateManager.GameHeight - 12, (int)(gameStateManager.GameWidth * universe.Player.Oxygen / universe.Player.MaxOxygen), 12), Color.DarkCyan);

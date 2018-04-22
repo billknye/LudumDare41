@@ -228,12 +228,27 @@ namespace LudumDare41
                 new Point(1, 1)
             };
 
-            foreach (var neighbor in neighbors)
+            // When jetpack is on, player can move anywhere
+            if (Player.JetPackOn)
             {
-                if (canMove(Player, Player.Tile.Location, neighbor))
+                // Jetpack on
+                foreach (var neighbor in neighbors)
                 {
                     var dest = Player.Tile.Location + neighbor;
-                    yield return this[dest.X, dest.Y];
+                    yield return this[dest];
+                }
+            }
+
+            else
+            {
+                // Jetpack not on
+                foreach (var neighbor in neighbors)
+                {
+                    if (canMove(Player, Player.Tile.Location, neighbor))
+                    {
+                        var dest = Player.Tile.Location + neighbor;
+                        yield return this[dest.X, dest.Y];
+                    }
                 }
             }
         }
@@ -295,7 +310,7 @@ namespace LudumDare41
                     }
                 }
             }
-            
+
             return true;
         }
 
@@ -329,6 +344,24 @@ namespace LudumDare41
             // tick!
             Player.Oxygen--;
 
+            // Jetpack stuff
+            if (Player.JetPackOn)
+            {
+                if (Player.JetPackFuel <= 0)
+                {
+                    Player.JetPackOn = false;
+                }
+                else
+                {
+                    Player.JetPackFuel -= Player.JetPackDecreaseFuel;
+                }
+            }
+            else if (Player.JetPackFuel < Player.MaxJetPackFuel)
+            {
+                Player.JetPackFuel += Player.JetPackIncreaseFuel;
+            }
+
+            // Tick-ing
             foreach (var chunk in ChunksOfFreedom.Values.ToArray())
             {
                 chunk.Tick(container);
@@ -343,7 +376,8 @@ namespace LudumDare41
 
         private void doPlayerMove(Point moveDir)
         {
-            if (!canMove(Player, Player.Tile.Location, moveDir))
+            // Check to see if move is valid and if Jet pack is off
+            if (!canMove(Player, Player.Tile.Location, moveDir) && !Player.JetPackOn)
             {
                 return; // no thanks 
             }
@@ -411,22 +445,15 @@ namespace LudumDare41
             EntityToTile(Player, dest);
 
             Console.WriteLine(Player.Velocity);
-=======
             var playerTile = this[Player.Tile.Location.X, Player.Tile.Location.Y];
             foreach (var entity in playerTile.Entities)
             {
-                if(entity is Obstacle obstacle)
+                if (entity is Obstacle obstacle)
                 {
-                    var damage =  rand.Next(UniverseConfiguration.ObstacleMinDamage, UniverseConfiguration.ObstacleMaxDamage);
-                    if(damage >= Player.HitPoints)
-                    {
-                        
-                    }
-
+                    var damage = Random.Next(UniverseConfiguration.ObstacleMinDamage, UniverseConfiguration.ObstacleMaxDamage);
                     Player.HitPoints -= damage;
                 }
             }
->>>>>>> 792044d... Added obstacle damage
         }
     }
 }

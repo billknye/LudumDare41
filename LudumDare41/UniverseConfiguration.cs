@@ -19,5 +19,8 @@ namespace LudumDare41
         public const int EnemyBaseAttack = 10;
         public const int PlayerInitialHP = 100;
         public const int PlayerBaseAttack = 10;
+        public const int PlayerMaxJetPackFuel = 100;
+        public const int PlayerJetPackIncrease = 20;
+        public const int PlayerJetPackDecrease = 20;
     }
 }

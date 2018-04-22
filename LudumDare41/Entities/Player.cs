@@ -17,10 +17,13 @@ namespace LudumDare41.Entities
         public bool LastMoveLeft { get; set; }
 
         public bool JetPackOn { get; set; }
-        
+
         public int JetPackFuel { get; set; }
-        
+
         public int MaxJetPackFuel { get; set; }
+
+        public int JetPackIncreaseFuel { get; set; }
+        public int JetPackDecreaseFuel { get; set; }
 
         public override int SpriteIndex => 0;
 
@@ -32,7 +35,10 @@ namespace LudumDare41.Entities
         {
             Oxygen = MaxOxygen = 100;
             HitPoints = MaxHitPoints = 100;
-            JetPackFuel = MaxJetPackFuel = 100;
+            JetPackFuel = MaxJetPackFuel = UniverseConfiguration.PlayerMaxJetPackFuel;
+
+            JetPackIncreaseFuel = UniverseConfiguration.PlayerJetPackIncrease;
+            JetPackDecreaseFuel = UniverseConfiguration.PlayerJetPackDecrease;
 
             JetPackOn = false;
         }
