@@ -16,12 +16,9 @@ namespace LudumDare41.Entities.Behavior
             var tile = entity.Tile;
 
             var picker = tile.Entities.FirstOrDefault(n => n != entity && CanPickup(n));
-            if (picker != null)
+            if ((picker != null) && (picker == universe.Player))
             {
-                if (picker == universe.Player)
-                {
-                    Assets.SoundEffects.Pickup.Play();
-                }
+                Assets.SoundEffects.Pickup.Play();
 
                 PickedUp(picker);
                 universe.RemoveEntityFromTile(entity);
