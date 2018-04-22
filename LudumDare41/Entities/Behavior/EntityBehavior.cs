@@ -45,10 +45,16 @@ namespace LudumDare41.Entities.Behavior
             this.universe = universe;
         }
 
-
         public override void Tick(Entity entity)
         {
             var enemy = entity as Enemy;
+
+            if (enemy.HitPoints <= 0)
+            {
+                enemy = null; //Enemy is dead
+                return;
+            }
+
             var tile = enemy.Tile;
 
             // move towards da player...
@@ -104,15 +110,15 @@ namespace LudumDare41.Entities.Behavior
             {
                 Combat(enemy);
             }
-
         }
-
-
 
         private void Combat(Enemy enemy)
         {
             universe.Player.HitPoints = universe.Player.HitPoints - universe.Random.Next(1, enemy.BaseAttack);
             enemy.HitPoints = enemy.HitPoints - universe.Random.Next(1, universe.Player.BaseAttack);
+
+            Console.WriteLine($"Enemy hitpoints: {universe.Player.HitPoints}");
+            Console.WriteLine($"Enemy hitpoints: {enemy.HitPoints}");
         }
     }
 }
