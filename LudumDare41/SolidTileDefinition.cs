@@ -20,10 +20,4 @@
 
         public override int SpriteIndex => 1;
     }
-
-    public class WallTileDefinition : TileDefinition
-    {
-
-        public override int SpriteIndex => 11;
-    }
 }

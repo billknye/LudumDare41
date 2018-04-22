@@ -8,7 +8,6 @@
         public static TileDefinition OpenSpace;
         public static TileDefinition Asteroid;
         public static TileDefinition Decking;
-        public static TileDefinition Wall;
 
         static TileDefinition()
         {
@@ -17,7 +16,6 @@
             OpenSpace = AddTileDefinition(new TileDefinition());
             Asteroid = AddTileDefinition(new AsteroidTileDefinition());
             Decking = AddTileDefinition(new DeckingTileDefinition());
-            Wall = AddTileDefinition(new WallTileDefinition());
         }
 
         private static TileDefinition AddTileDefinition(TileDefinition tileDefinition)

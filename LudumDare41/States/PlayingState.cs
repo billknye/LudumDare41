@@ -271,30 +271,29 @@ namespace LudumDare41.States
 
             // UI
             // jetpack bar
-            spriteBatch.Draw(Assets.Sprites.PixelTexture, new Rectangle(0, 12, (int)(gameStateManager.GameWidth * universe.Player.JetPackFuel / universe.Player.MaxJetPackFuel), 12), Color.Aqua);
-
+            drawBar(universe.Player.JetPackFuel, UniverseConfiguration.PlayerMaxJetPackFuel, Color.Cyan, -32);
+            
             // oxygen bar
-            //spriteBatch.Draw(Assets.Sprites.PixelTexture, new Rectangle(0, gameStateManager.GameHeight - 12, (int)(gameStateManager.GameWidth * universe.Player.Oxygen / universe.Player.MaxOxygen), 12), Color.Blue);
-            drawBar(universe.Player.Oxygen, universe.Player.MaxOxygen, Color.Blue);
+            drawBar(universe.Player.Oxygen, universe.Player.MaxOxygen, Color.Blue, gameStateManager.GameHeight - 64 - 32);
+           
+            // HitPoints bar
+            drawBar(universe.Player.HitPoints, universe.Player.MaxHitPoints, Color.Red, gameStateManager.GameHeight - 64);
 
+            // fade out when dying
             if (universe.Player.Oxygen < 30)
             {
                 spriteBatch.Draw(Assets.Sprites.PixelTexture, new Rectangle(0, 0, gameStateManager.GameWidth, gameStateManager.GameHeight), Color.FromNonPremultiplied(0, 0, 0, (int)(30 - universe.Player.Oxygen) * 8));
             }
-
-            // HitPoints bar
-            spriteBatch.Draw(Assets.Sprites.PixelTexture, new Rectangle(0, 0, (int)(gameStateManager.GameWidth * universe.Player.HitPoints / UniverseConfiguration.PlayerInitialHP), 12), Color.Red);
-
             spriteBatch.End();
         }
 
-        private void drawBar(float value, float max, Color color)
+        private void drawBar(float value, float max, Color color, int y)
         {
             for (int x = 0; x < gameStateManager.GameWidth; x += 64)
             {
                 if (value * gameStateManager.GameWidth / max > x)
                 {
-                    spriteBatch.Draw(Assets.Sprites.SampleSprite, new Vector2(x, gameStateManager.GameHeight - 64), new Rectangle(0, 192, 64, 64), color);
+                    spriteBatch.Draw(Assets.Sprites.SampleSprite, new Vector2(x, y), new Rectangle(0, 192, 64, 64), color);
                 }
             }
         }
