@@ -28,7 +28,7 @@ namespace LudumDare41
             ChunksOfFreedom = new Dictionary<Point, ChunkOfSpace>();
 
             noise = new SimplexNoise2D(20, 10);
-            deckingNoise = new SimplexNoise2D(456565, 30);
+            deckingNoise = new SimplexNoise2D(456565, 5);
 
             var chunk = generateChunk(0, 0);
 
@@ -130,24 +130,11 @@ namespace LudumDare41
                     var index = TileDefinition.OpenSpace.TileDefinitionId;
                     var val = deckingNoise.GetValue(pos.X, pos.Y);
 
-                    if (val > 0.6f)
+                    if (val > 0.78f)
                     {
-                        var val2 = noise.GetValue(pos.X, pos.Y);
-                        if (val2 > 0.75f)
+                        if (pos.Y % 3 == 0)
                         {
-                            // open, no decking here
-                            //index = TileDefinition.Wall.TileDefinitionId;
-                        }
-                        else
-                        {
-                            if (pos.Y % 3 == 0)
-                            {
-                                index = TileDefinition.Decking.TileDefinitionId;
-                            }
-                            else
-                            {
-                                index = TileDefinition.Wall.TileDefinitionId;
-                            }
+                            index = TileDefinition.Decking.TileDefinitionId;
                         }
                     }
                     else
