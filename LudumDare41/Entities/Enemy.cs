@@ -1,5 +1,6 @@
 ﻿using LudumDare41.Entities.Behavior;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 
 namespace LudumDare41.Entities
@@ -16,9 +17,10 @@ namespace LudumDare41.Entities
 
         public override Type Behavior => typeof(EnemyAttackBehavior);
 
+        public override SpriteEffects SpriteEffects => (HitPoints <= 0 ? SpriteEffects.FlipVertically : SpriteEffects.None);
+
         public Enemy()
         {
         }
-
     }
 }
