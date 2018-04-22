@@ -34,8 +34,8 @@ namespace LudumDare41.Entities
 
         public Player()
         {
-            Oxygen = MaxOxygen = 100;
-            HitPoints = MaxHitPoints = 100;
+            Oxygen = MaxOxygen = UniverseConfiguration.PlayerMaxOxigen;
+            HitPoints = MaxHitPoints = UniverseConfiguration.PlayerInitialHP;
             JetPackFuel = MaxJetPackFuel = UniverseConfiguration.PlayerMaxJetPackFuel;
 
             JetPackIncreaseFuel = UniverseConfiguration.PlayerJetPackIncrease;

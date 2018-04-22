@@ -34,8 +34,8 @@ namespace LudumDare41
 
             //REMOVE THIS. Set single enemy close to player
             var singleEnemy = container.New<Enemy>();
-            singleEnemy.HitPoints = UniverseConfiguration.SquidwardMaxHP;
-            singleEnemy.BaseAttack = UniverseConfiguration.SquidwardBaseAttack;
+            singleEnemy.HitPoints = UniverseConfiguration.EnemyMaxHP;
+            singleEnemy.BaseAttack = UniverseConfiguration.EnemyBaseAttack;
             singleEnemy.SpriteIndex = 5;
 
             AddEntityToTile(singleEnemy, this[3, 0]);
@@ -47,7 +47,6 @@ namespace LudumDare41
             AddObstacles();
             AddEnemies();
 
-
             Console.WriteLine();
         }
 
@@ -55,11 +54,11 @@ namespace LudumDare41
         {
             int[] kindOfEnemy = { 5, 6 }; //5 = Mr. Mander, 6 = Squid
 
-            for(var i = 0; i <= UniverseConfiguration.SquidwardNumberOfEnemies; ++i)
+            for(var i = 0; i <= UniverseConfiguration.NumberOfEnemies; ++i)
             {
                 Enemy enemy = container.New<Enemy>();
-                enemy.HitPoints = UniverseConfiguration.SquidwardMaxHP;
-                enemy.BaseAttack = UniverseConfiguration.SquidwardBaseAttack;
+                enemy.HitPoints = UniverseConfiguration.EnemyMaxHP;
+                enemy.BaseAttack = UniverseConfiguration.EnemyBaseAttack;
                 enemy.SpriteIndex = kindOfEnemy[Random.Next(kindOfEnemy.Length)];
                 AddEntityToTile(enemy, this[Random.Next(1, UniverseConfiguration.TotalEnemies), Random.Next(1, UniverseConfiguration.TotalEnemies)]);
             }
