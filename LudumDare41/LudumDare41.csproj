@@ -136,6 +136,9 @@
     <Content Include="Content\**\*.ttf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\sfx\punch.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Content\songs\song.ogg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
