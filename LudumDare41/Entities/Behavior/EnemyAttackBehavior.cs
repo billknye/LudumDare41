@@ -83,6 +83,7 @@ namespace LudumDare41.Entities.Behavior
 
         private void Combat(Enemy enemy)
         {
+            Assets.SoundEffects.Punch.Play();
             universe.Player.HitPoints = universe.Player.HitPoints - universe.Random.Next(1, enemy.BaseAttack);
             enemy.HitPoints = enemy.HitPoints - universe.Random.Next(1, universe.Player.BaseAttack);
 

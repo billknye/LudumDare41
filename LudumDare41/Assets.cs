@@ -34,6 +34,7 @@ namespace LudumDare41
         public static class SoundEffects
         {
             public static SoundEffect Pickup;
+            public static SoundEffect Punch;
         }
 
         public static void Initialize(GraphicsDevice graphicsDevice)
@@ -50,6 +51,7 @@ namespace LudumDare41
             Songs.Intro = contentManager.Get<Song>("song").Content;
 
             SoundEffects.Pickup = contentManager.Get<SoundEffect>("pickup").Content;
+            SoundEffects.Punch = contentManager.Get<SoundEffect>("punch").Content;
         }
     }
 }
