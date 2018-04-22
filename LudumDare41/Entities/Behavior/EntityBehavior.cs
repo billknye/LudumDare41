@@ -59,6 +59,8 @@ namespace LudumDare41.Entities.Behavior
             var dx = Math.Sign(universe.Player.Tile.Location.X - tile.Location.X);
             var dy = Math.Sign(universe.Player.Tile.Location.Y - tile.Location.Y);
 
+            enemy.Velocity = new Point(dx, dy);
+
             if (dx != 0 && dy == 0)
             {
                 var move = universe.Random.Next(0, 3);

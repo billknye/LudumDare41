@@ -11,7 +11,6 @@ namespace LudumDare41.Entities
         public int HitPoints { get; set; }
         public int BaseAttack { get; set; }
         public int ModifierAttack { get; set; }
-
         public Point Velocity { get; set; }
 
         public override int SpriteIndex
@@ -22,8 +21,32 @@ namespace LudumDare41.Entities
         }
 
         public override Type Behavior => typeof(EnemyAttackBehavior);
+        private SpriteEffects LastEffect = SpriteEffects.None;
 
-        public override SpriteEffects SpriteEffects => (HitPoints <= 0 ? SpriteEffects.FlipVertically : SpriteEffects.None);
+        public override SpriteEffects SpriteEffects
+        {
+            get
+            {
+                if(HitPoints <= 0)
+                {
+                    return SpriteEffects.FlipVertically;
+                }
+
+                if(Velocity.X > 0)
+                {
+                    LastEffect = SpriteEffects.FlipHorizontally;
+                    return LastEffect;
+                }
+
+                if(Velocity.X == 0)
+                {
+                    return LastEffect;
+                }
+                LastEffect = SpriteEffects.None;
+                return LastEffect;
+            }
+        }
+
 
         public Enemy()
         {
