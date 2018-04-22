@@ -46,7 +46,7 @@ namespace LudumDare41
 
             AddEntityToTile(singleEnemy, this[3, 0]);
 
-            var o2Tank = new OxygenTank() {};
+            var o2Tank = new OxygenTank() { };
             AddEntityToTile(o2Tank, this[10, -3]);
 
             Player = new Player() { HitPoints = UniverseConfiguration.PlayerInitialHP, BaseAttack = UniverseConfiguration.PlayerBaseAttack };
@@ -235,7 +235,8 @@ namespace LudumDare41
                 foreach (var neighbor in neighbors)
                 {
                     var dest = Player.Tile.Location + neighbor;
-                    yield return this[dest];
+                    if (!isSolid(dest))
+                        yield return this[dest];
                 }
             }
 
@@ -354,7 +355,7 @@ namespace LudumDare41
                 else
                 {
                     Player.JetPackFuel -= Player.JetPackDecreaseFuel;
-                    if(Player.JetPackFuel < 0)
+                    if (Player.JetPackFuel < 0)
                     {
                         Player.JetPackFuel = 0;
                     }
@@ -363,7 +364,7 @@ namespace LudumDare41
             else if (Player.JetPackFuel < Player.MaxJetPackFuel)
             {
                 Player.JetPackFuel += Player.JetPackIncreaseFuel;
-                if(Player.JetPackFuel > Player.MaxJetPackFuel)
+                if (Player.JetPackFuel > Player.MaxJetPackFuel)
                 {
                     Player.JetPackFuel = Player.MaxJetPackFuel;
                 }
