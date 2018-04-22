@@ -2,34 +2,18 @@
 
 namespace LudumDare41.Entities.Behavior
 {
-    public class OxygenTankBehavior : EntityBehavior
+
+    public class OxygenTankBehavior : PlayerOnlyItemPickupBehavior
     {
-        private readonly Universe universe;
-
-        public OxygenTankBehavior(Universe universe)
+        public OxygenTankBehavior(Universe universe) : base(universe)
         {
-            this.universe = universe;
+
         }
 
-        public override void Tick(Entity entity)
+        protected override void PickedUp(Entity entity)
         {
-            var tank = entity as OxygenTank;
-            var tile = tank.Tile;
-
-            if (tile.Location == universe.Player.Tile.Location)
-            {
-                Assets.SoundEffects.Pickup.Play();
-                FillOxygen(tank);
-                universe.RemoveEntityFromTile(tank);
-            }
-        }
-
-        private void FillOxygen(OxygenTank item)
-        {
-            universe.Player.Oxygen = universe.Player.Oxygen + UniverseConfiguration.ItemOxygenTankAmountToRefill > UniverseConfiguration.PlayerMaxOxigen 
+            universe.Player.Oxygen = universe.Player.Oxygen + UniverseConfiguration.ItemOxygenTankAmountToRefill > UniverseConfiguration.PlayerMaxOxigen
                 ? UniverseConfiguration.PlayerMaxOxigen : universe.Player.Oxygen += UniverseConfiguration.ItemOxygenTankAmountToRefill;
-
-            Console.WriteLine($"Oxygen: {universe.Player.Oxygen}");
         }
     }
 }

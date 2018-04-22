@@ -169,8 +169,16 @@ namespace LudumDare41
                     {
                         if (Random.NextDouble() > 0.99)
                         {
-                            var o2Tank = new OxygenTank() { };
-                            AddEntityToTile(o2Tank, chunk[x, y]);
+                            if (Random.NextDouble() > 0.5)
+                            {
+                                var item = new BlasterItem() { };
+                                AddEntityToTile(item, chunk[x, y]);
+                            }
+                            else
+                            {
+                                var item = new OxygenTank() { };
+                                AddEntityToTile(item, chunk[x, y]);
+                            }
                         }
                     }
                 }
@@ -399,7 +407,7 @@ namespace LudumDare41
                 chunk.Tick(container);
             }
 
-            return false;
+            return true;
         }
 
         private bool doPlayerMove(Point moveDir)
@@ -471,18 +479,7 @@ namespace LudumDare41
 
             RemoveEntityFromTile(Player);
             AddEntityToTile(Player, dest);
-
-            Console.WriteLine(Player.Velocity);
-            var playerTile = this[Player.Tile.Location.X, Player.Tile.Location.Y];
-            foreach (var entity in playerTile.Entities)
-            {
-                if (entity is Obstacle obstacle)
-                {
-                    var damage = Random.Next(UniverseConfiguration.ObstacleMinDamage, UniverseConfiguration.ObstacleMaxDamage);
-                    Player.HitPoints -= damage;
-                }
-            }
-
+            
             return true;
         }
     }

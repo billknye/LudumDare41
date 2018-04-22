@@ -6,5 +6,8 @@ namespace LudumDare41.Entities
     public class OxygenTank : Item
     {
         public override Type Behavior => typeof(OxygenTankBehavior);
+
+
+        public override int SpriteIndex => 4;
     }
 }

@@ -101,7 +101,6 @@ namespace LudumDare41.States
             // Handle Jetpack on/off
             if(wasKeyJustPressed(Keys.Space, keyboard, lastKeyboard))
             {
-
                 Assets.SoundEffects.Pickup.Play();
 
                 var player = universe.Player;
@@ -255,8 +254,15 @@ namespace LudumDare41.States
 
                 foreach (var entity in tile.Entities)
                 {
-                    var entSprite = entity.SpriteIndex;
                     var pos = getEntityScreenPos(entity);
+
+                    if (entity is Item)
+                    {
+                        var sprite = 10;
+                        spriteBatch.Draw(Assets.Sprites.SampleSprite, pos, new Rectangle((sprite % 4) * tileSize, (sprite / 4) * tileSize, UniverseConfiguration.TileSize, UniverseConfiguration.TileSize), getLightColor(light), 0f, Vector2.Zero, 1f, entity.SpriteEffects, 0f);
+                    }
+
+                    var entSprite = entity.SpriteIndex;
 
                     spriteBatch.Draw(Assets.Sprites.SampleSprite, pos, new Rectangle((entSprite % 4) * tileSize, (entSprite / 4) * tileSize, UniverseConfiguration.TileSize, UniverseConfiguration.TileSize), getLightColor(light), 0f, Vector2.Zero, 1f, entity.SpriteEffects, 0f);
                 }
