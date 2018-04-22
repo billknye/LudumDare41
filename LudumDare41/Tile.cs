@@ -33,6 +33,7 @@ namespace LudumDare41
             {
                 if (ent.Behavior != null)
                 {
+
                     var behavior = container.New(ent.Behavior) as EntityBehavior;
                     behavior.Tick(ent);
                 }

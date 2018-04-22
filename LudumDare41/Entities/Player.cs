@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 
 namespace LudumDare41.Entities
 {
@@ -24,8 +25,8 @@ namespace LudumDare41.Entities
 
         public Player()
         {
-            Oxygen = MaxOxygen = 100;
-            HitPoints = MaxHitPoints = 100;
+            Oxygen = MaxOxygen = UniverseConfiguration.PlayerMaxOxigen;
+            HitPoints = MaxHitPoints = UniverseConfiguration.PlayerInitialHP;
         }
     }
 }

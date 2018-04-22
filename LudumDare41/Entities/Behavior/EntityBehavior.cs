@@ -11,9 +11,7 @@ namespace LudumDare41.Entities.Behavior
     {
         public EntityBehavior()
         {
-
         }
-
         public abstract void Tick(Entity entity);
     }
 
@@ -68,37 +66,37 @@ namespace LudumDare41.Entities.Behavior
                 {
                     var destPt = tile.Location + new Point(dx, 0);
                     var dest = universe[destPt.X, destPt.Y];
-                    universe.EntityFromTile(enemy);
-                    universe.EntityToTile(enemy, dest);
+                    universe.RemoveEntityFromTile(enemy);
+                    universe.AddEntityToTile(enemy, dest);
                 }
                 else if (move == 0)
                 {
                     var destPt = tile.Location + new Point(0, dy);
                     var dest = universe[destPt.X, destPt.Y];
-                    universe.EntityFromTile(enemy);
-                    universe.EntityToTile(enemy, dest);
+                    universe.RemoveEntityFromTile(enemy);
+                    universe.AddEntityToTile(enemy, dest);
                 }
                 else
                 {
                     var destPt = tile.Location + new Point(dx, dy);
                     var dest = universe[destPt.X, destPt.Y];
-                    universe.EntityFromTile(enemy);
-                    universe.EntityToTile(enemy, dest);
+                    universe.RemoveEntityFromTile(enemy);
+                    universe.AddEntityToTile(enemy, dest);
                 }
             }
             else if (dx != 0)
             {
                 var destPt = tile.Location + new Point(dx, 0);
                 var dest = universe[destPt.X, destPt.Y];
-                universe.EntityFromTile(enemy);
-                universe.EntityToTile(enemy, dest);
+                universe.RemoveEntityFromTile(enemy);
+                universe.AddEntityToTile(enemy, dest);
             }
             else if (dy != 0)
             {
                 var destPt = tile.Location + new Point(0, dy);
                 var dest = universe[destPt.X, destPt.Y];
-                universe.EntityFromTile(enemy);
-                universe.EntityToTile(enemy, dest);
+                universe.RemoveEntityFromTile(enemy);
+                universe.AddEntityToTile(enemy, dest);
             }
             else
             {
@@ -119,6 +117,36 @@ namespace LudumDare41.Entities.Behavior
 
             Console.WriteLine($"Enemy hitpoints: {universe.Player.HitPoints}");
             Console.WriteLine($"Enemy hitpoints: {enemy.HitPoints}");
+        }
+    }
+
+    public class OxygenTankBehavior : EntityBehavior
+    {
+        private readonly Universe universe;
+
+        public OxygenTankBehavior(Universe universe)
+        {
+            this.universe = universe;
+        }
+
+        public override void Tick(Entity entity)
+        {
+            var tank = entity as OxygenTank;
+            var tile = tank.Tile;
+
+            if (tile.Location == universe.Player.Tile.Location)
+            {
+                FillOxygen(tank);
+                universe.RemoveEntityFromTile(tank);
+            }
+        }
+
+        private void FillOxygen(OxygenTank item)
+        {
+            universe.Player.Oxygen = universe.Player.Oxygen + UniverseConfiguration.ItemOxygenTankAmountToRefill > UniverseConfiguration.PlayerMaxOxigen 
+                ? UniverseConfiguration.PlayerMaxOxigen : universe.Player.Oxygen += UniverseConfiguration.ItemOxygenTankAmountToRefill;
+
+            Console.WriteLine($"Oxygen: {universe.Player.Oxygen}");
         }
     }
 }

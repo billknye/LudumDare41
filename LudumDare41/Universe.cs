@@ -44,13 +44,13 @@ namespace LudumDare41
             singleEnemy.HitPoints = UniverseConfiguration.EnemyMaxHP;
             singleEnemy.BaseAttack = UniverseConfiguration.EnemyBaseAttack;
 
-            EntityToTile(singleEnemy, this[3, 0]);
+            AddEntityToTile(singleEnemy, this[3, 0]);
 
-            var o2Tank = new OxygenTank();
-            EntityToTile(o2Tank, this[10, -3]);
+            var o2Tank = new OxygenTank() {};
+            AddEntityToTile(o2Tank, this[10, -3]);
 
             Player = new Player() { HitPoints = UniverseConfiguration.PlayerInitialHP, BaseAttack = UniverseConfiguration.PlayerBaseAttack };
-            EntityToTile(Player, this[0, 0]);
+            AddEntityToTile(Player, this[0, 0]);
 
             AddObstacles();
             AddEnemies();
@@ -67,8 +67,7 @@ namespace LudumDare41
                 Enemy enemy = container.New<Enemy>();
                 enemy.HitPoints = UniverseConfiguration.EnemyMaxHP;
                 enemy.BaseAttack = UniverseConfiguration.EnemyBaseAttack;
-
-                EntityToTile(enemy, this[Random.Next(1, UniverseConfiguration.NumberOfEnemies), Random.Next(1, UniverseConfiguration.NumberOfEnemies)]);
+                AddEntityToTile(enemy, this[Random.Next(1, UniverseConfiguration.NumberOfEnemies), Random.Next(1, UniverseConfiguration.NumberOfEnemies)]);
             }
         }
 
@@ -77,7 +76,7 @@ namespace LudumDare41
             for (int i = 0; i <= Random.Next(UniverseConfiguration.MinNumberOfObstacles, UniverseConfiguration.MaxNumberOfObstacles); i++)
             {
                 Obstacle obstacle = new Obstacle() { Destructible = true };
-                EntityToTile(obstacle, this[Random.Next(1, UniverseConfiguration.MaxNumberOfObstacles), Random.Next(1, UniverseConfiguration.MaxNumberOfObstacles)]);
+                AddEntityToTile(obstacle, this[Random.Next(1, UniverseConfiguration.MaxNumberOfObstacles), Random.Next(1, UniverseConfiguration.MaxNumberOfObstacles)]);
             }
         }
 
@@ -156,7 +155,7 @@ namespace LudumDare41
             return chunk;
         }
 
-        public void EntityToTile(Entity entity, Tile tile)
+        public void AddEntityToTile(Entity entity, Tile tile)
         {
             thingsToDoAfterTick.Add(() =>
             {
@@ -185,7 +184,7 @@ namespace LudumDare41
             });
         }
 
-        public void EntityFromTile(Entity entity)
+        public void RemoveEntityFromTile(Entity entity)
         {
             thingsToDoAfterTick.Add(() =>
             {
@@ -407,8 +406,8 @@ namespace LudumDare41
             else if (moveDir.X > 0)
                 Player.LastMoveLeft = false;
 
-            EntityFromTile(Player);
-            EntityToTile(Player, dest);
+            RemoveEntityFromTile(Player);
+            AddEntityToTile(Player, dest);
 
             Console.WriteLine(Player.Velocity);
         }
