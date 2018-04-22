@@ -9,7 +9,7 @@ namespace LudumDare41
     public class Tile
     {
         public Point Location;
-        public byte SomeTileShit;
+        public int TileDefinitionId;
         public int Light;
 
         public List<Entity> Entities;
@@ -18,7 +18,7 @@ namespace LudumDare41
         {
             get
             {
-                return TileDefinition.Definitions[SomeTileShit];
+                return TileDefinition.Definitions[TileDefinitionId];
             }
         }
 
