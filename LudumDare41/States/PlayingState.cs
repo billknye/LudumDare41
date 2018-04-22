@@ -45,12 +45,7 @@ namespace LudumDare41.States
         {
             MouseState mouse = Mouse.GetState();
             KeyboardState keyboard = Keyboard.GetState();
-
-            if (wasKeyJustPressed(Keys.Space, keyboard, lastKeyboard))
-            {
-                Assets.SoundEffects.Pickup.Play();
-            }
-
+            
             // make move go
             var dest = Point.Zero;
 
@@ -65,6 +60,7 @@ namespace LudumDare41.States
                 }
             }
 
+            bool idleTick = false;
             if (wasKeyJustPressed(Keys.NumPad1, keyboard, lastKeyboard))
             {
                 dest = new Point(-1, 1);
@@ -97,10 +93,17 @@ namespace LudumDare41.States
             {
                 dest = new Point(1, -1);
             }
+            if (wasKeyJustPressed(Keys.NumPad5, keyboard, lastKeyboard))
+            {
+                idleTick = true;
+            }
             
             // Handle Jetpack on/off
             if(wasKeyJustPressed(Keys.Space, keyboard, lastKeyboard))
             {
+
+                Assets.SoundEffects.Pickup.Play();
+
                 var player = universe.Player;
                 if(!player.JetPackOn && player.JetPackFuel > 0)
                 {
@@ -112,15 +115,17 @@ namespace LudumDare41.States
                 }
             }
 
-            if (dest != Point.Zero)
+            if (dest != Point.Zero || idleTick)
             {
-                universe.DoTick(dest);
-                animationTimer = TimeSpan.FromSeconds(UniverseConfiguration.MoveTime);
-
-                if ((universe.Player.Oxygen <= 0) || (universe.Player.HitPoints <= 0))
+                if (universe.DoTick(dest))
                 {
-                    gameStateManager.Leave();
-                    gameStateManager.Enter<GameOverState>();
+                    animationTimer = TimeSpan.FromSeconds(UniverseConfiguration.MoveTime);
+
+                    if ((universe.Player.Oxygen <= 0) || (universe.Player.HitPoints <= 0))
+                    {
+                        gameStateManager.Leave();
+                        gameStateManager.Enter<GameOverState>();
+                    }
                 }
             }
 

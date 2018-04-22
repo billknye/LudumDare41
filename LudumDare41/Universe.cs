@@ -18,19 +18,16 @@ namespace LudumDare41
         SimplexNoise2D noise;
         SimplexNoise2D deckingNoise;
         private readonly Container container;
-
-        private List<Action> thingsToDoAfterTick;
-
+        
         public Universe(Container container)
         {
             this.container = container;
-            thingsToDoAfterTick = new List<Action>();
             int seed = DateTime.Now.Millisecond;
             Random = new Random(seed);
 
             ChunksOfFreedom = new Dictionary<Point, ChunkOfSpace>();
 
-            noise = new SimplexNoise2D(2, 5);
+            noise = new SimplexNoise2D(20, 10);
             deckingNoise = new SimplexNoise2D(456565, 30);
 
             var chunk = generateChunk(0, 0);
@@ -134,7 +131,7 @@ namespace LudumDare41
                     var index = TileDefinition.OpenSpace.TileDefinitionId;
                     var val = deckingNoise.GetValue(pos.X, pos.Y);
 
-                    if (val > 0.5f)
+                    if (val > 0.6f)
                     {
                         var val2 = noise.GetValue(pos.X, pos.Y);
                         if (val2 > 0.75f)
@@ -152,6 +149,13 @@ namespace LudumDare41
                             {
                                 index = TileDefinition.Wall.TileDefinitionId;
                             }
+                        }
+                    }
+                    else
+                    {
+                        if (noise.GetValue(pos.X, pos.Y) > 0.8f)
+                        {
+                            index = TileDefinition.Asteroid.TileDefinitionId;
                         }
                     }
 
@@ -351,11 +355,14 @@ namespace LudumDare41
         {
             return isSolid(entity.Tile.Location + new Point(0, 1));
         }
-        internal void DoTick(Point? moveDir = null)
+        public bool DoTick(Point? moveDir = null)
         {
-            if (moveDir != null)
+            if (moveDir != null && moveDir != Point.Zero)
             {
-                doPlayerMove(moveDir.Value);
+                if (!doPlayerMove(moveDir.Value))
+                {
+                    return false;
+                }
             }
 
             // tick!
@@ -392,19 +399,15 @@ namespace LudumDare41
                 chunk.Tick(container);
             }
 
-            foreach (var action in thingsToDoAfterTick)
-            {
-                action();
-            }
-            thingsToDoAfterTick.Clear();
+            return false;
         }
 
-        private void doPlayerMove(Point moveDir)
+        private bool doPlayerMove(Point moveDir)
         {
             // Check to see if move is valid and if Jet pack is off
             if (!canMove(Player, Player.Tile.Location, moveDir) && !Player.JetPackOn)
             {
-                return; // no thanks 
+                return false; // no thanks 
             }
 
             if (isOnLand(Player))
@@ -444,7 +447,7 @@ namespace LudumDare41
 
             if (destDef.Solid)
             {
-                return; // nope
+                return false; // nope
             }
 
             // check solid corner moves
@@ -453,12 +456,12 @@ namespace LudumDare41
                 var corner1 = this[Player.Tile.Location.X + moveDir.X, Player.Tile.Location.Y];
                 var corner1def = TileDefinition.Definitions[corner1.TileDefinitionId];
                 if (corner1def.Solid)
-                    return;
+                    return false;
 
                 var corner2 = this[Player.Tile.Location.X, Player.Tile.Location.Y + moveDir.Y];
                 var corner2def = TileDefinition.Definitions[corner2.TileDefinitionId];
                 if (corner2def.Solid)
-                    return;
+                    return false;
             }
 
             if (moveDir.X < 0)
@@ -479,6 +482,8 @@ namespace LudumDare41
                     Player.HitPoints -= damage;
                 }
             }
+
+            return true;
         }
     }
 }
